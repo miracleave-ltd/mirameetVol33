@@ -1,0 +1,14 @@
+[book]
+authors = ["n.tanabe"]
+language = "ja"
+multilingual = false
+src = "src"
+
+[output.html]
+curly-quotes = true
+default-theme = "Navy"
+additional-css = ["theme/custom.css"]
+
+[preprocessor.toc]
+command = "mdbook-toc"
+renderer = ["html"]
