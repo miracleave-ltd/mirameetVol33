@@ -1,0 +1,21 @@
+{
+    // 保存時にフォーマット
+    "editor.formatOnSave": true,
+    // 基本的な言語機能のサポート
+    "ruby.useLanguageServer": true,
+    // Formatで使用するツールを`bundle exec`で実行するかどうか
+    // ここではグローバルにインストールしたGemを使うのでfalseに指定
+    "ruby.useBundler": false,
+    // `Format Document`で使用するフォーマッターにrubocopを指定
+    "ruby.format": "rubocop",
+    // Linterにrubocopを指定
+    "ruby.lint": {
+        "rubocop": {
+            "useBundler": false
+        }
+    },
+    "[ruby]": {
+        // インデントは2スペ
+        "editor.tabSize": 2
+    }
+}

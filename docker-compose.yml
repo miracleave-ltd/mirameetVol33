@@ -1,0 +1,52 @@
+version: "3.2"
+
+volumes:
+  v33-volume:
+
+services:
+  v33_db:
+    container_name: v33_db
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    volumes:
+      - v33-volume:/var/lib/postgresql/data
+    environment:
+      - TZ=Asia/Tokyo
+      - POSTGRES_USER=v33
+      - POSTGRES_PASSWORD=meetupv33
+
+  v33_web:
+    container_name: v33_web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash
+    tty: true
+    restart: always
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - v33_db
+
+  v33_doc:
+    container_name: v33_doc
+    image: "peaceiris/mdbook:v0.4.34-rust"
+    stdin_open: true
+    command: serve --hostname '0.0.0.0'
+    tty: true
+    ports:
+      - 4000:3000
+      - 4001:3001
+    volumes:
+      - ./doc:/book
+
+  v33_mail:
+    container_name: v33_mail
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"

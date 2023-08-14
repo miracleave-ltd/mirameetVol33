@@ -1,0 +1,35 @@
+{
+	"name": "meetup v33 dev container",
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "v33_web",
+	"workspaceFolder": "/app",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				// Git 表示拡張
+				"mhutchie.git-graph",
+				"donjayamanne.githistory",
+				// md ドキュメント整備
+				"TakumiI.markdowntable",
+				"hancel.markdown-image",
+				// VSCode 表示拡張
+				"MS-CEINTL.vscode-language-pack-ja",
+				"kaiwood.endwise",
+				"oderwat.indent-rainbow",
+				"jduponchelle.rainbow-end",
+				"mosapride.zenkaku",
+				"shardulm94.trailing-spaces",
+				// Ruby 拡張
+				"rebornix.Ruby",
+				"castwide.solargraph",
+				"wingrunr21.vscode-ruby",
+				"usernamehw.errorlens",
+				"KoichiSasada.vscode-rdbg",
+				// linter
+				"misogi.ruby-rubocop"
+			]
+		}
+	}
+}
