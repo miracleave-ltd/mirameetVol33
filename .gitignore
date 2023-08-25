@@ -31,5 +31,5 @@
 /config/master.key
 
 book
-bin
+# bin
 .DS_Store
