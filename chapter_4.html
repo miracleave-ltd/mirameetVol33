@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>DBのバージョンアップ</title>
+        <title>ケース２：DBのバージョンアップ</title>
                 
 
         <!-- Custom HTML head -->
@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="chapter_1.html">事の発端</a></li><li class="chapter-item expanded affix "><a href="chapter_2.html">Docker + VSCode で環境構築</a></li><li class="chapter-item expanded affix "><a href="chapter_3.html">外部連携のモック化</a></li><li class="chapter-item expanded affix "><a href="chapter_4.html" class="active">DBのバージョンアップ</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="chapter_1.html">はじめに</a></li><li class="chapter-item expanded affix "><a href="chapter_2.html">Docker + VSCode で環境構築</a></li><li class="chapter-item expanded affix "><a href="chapter_3.html">ケース１：外部連携のモック化</a></li><li class="chapter-item expanded affix "><a href="chapter_4.html" class="active">ケース２：DBのバージョンアップ</a></li><li class="chapter-item expanded affix "><a href="chapter_5.html">ローカル環境のCleanUp</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -147,17 +147,47 @@
                         <h1 id="4-dbのバージョンアップ"><a class="header" href="#4-dbのバージョンアップ">4. DBのバージョンアップ</a></h1>
 <!-- toc -->
 <h2 id="41-別バージョンのdbを起動"><a class="header" href="#41-別バージョンのdbを起動">4.1 別バージョンのDBを起動</a></h2>
-<p>Dockerで環境構築するメリットとして、ミドルウェアのバージョンアップ等も容易に実施することが出来ることです。
+<p>Dockerで環境構築するメリットとして、ミドルウェアのバージョンアップ等も容易に実施することが出来ることが挙げられます。
 現在PostgreSQL13で起動しているので、こちらを15にアップデートしてみましょう。</p>
 <p>ローカル環境に直接PostgreSQLがインストールされている場合は、単純にpg_upgradeすれば良い場面もあるかもしれませんが、
-例えば、案件A：ver13、案件B：ver13の状態で案件Aだけ15に上げたいという状況だといかがでしょう？
-PCをもう一台用意しますか？</p>
-<p>データ移行ツールと新DBでの動作確認を行う</p>
-<p>新旧バージョンのDBコンテナを起動</p>
-<p>移行を試す</p>
-<p>新DBのみ起動</p>
-<p>動作確認</p>
-<p>完了</p>
+例えば、案件A：ver13、案件B：ver13の状態で案件Aだけ15に上げたいという状況だといかがでしょう？</p>
+<h3 id="バックアップを取得"><a class="header" href="#バックアップを取得">バックアップを取得</a></h3>
+<p>バージョン13のコンテナからバックアップを取得します。
+以下をコマンドプロンプトより実行します。</p>
+<pre><code class="language-bash">docker-compose exec db pg_dumpall --clean --username postgres &gt; backup.sql
+</code></pre>
+<p>その後データベースコンテナの削除を行います。</p>
+<pre><code class="language-bash">docker container ls -a
+docker container rm [コンテナID]
+</code></pre>
+<p>ボリュームも同様に削除します。</p>
+<pre><code class="language-bash">docker volume ls
+docker volume remove v33-volume
+</code></pre>
+<h3 id="バージョンをアップデート"><a class="header" href="#バージョンをアップデート">バージョンをアップデート</a></h3>
+<p>※並行して稼働させるなら順番等考える必要あり。</p>
+<pre><code class="language-diff">  v33_db:
+    container_name: v33_db
+-    image: postgres:13
++    image: postgres:15
+    ports:
+      - &quot;5432:5432&quot;
+    volumes:
+      - v33-volume:/var/lib/postgresql/data
+    environment:
+      - TZ=Asia/Tokyo
+      - POSTGRES_USER=v33
+      - POSTGRES_PASSWORD=meetupv33
+</code></pre>
+<p>その後、一度dev containerの接続を閉じて、再度ReOpen Containerする。</p>
+<h3 id="リストア"><a class="header" href="#リストア">リストア</a></h3>
+<pre><code class="language-bash">cat backup.sql | docker-compose exec -T v33_db psql --username v33
+</code></pre>
+<p>ユーザーの登録が出来るか動作確認をして問題無ければDBのバージョンアップは完了となります。</p>
+<h3 id="補足ボリュームとコンテナの単純再作成"><a class="header" href="#補足ボリュームとコンテナの単純再作成">補足：ボリュームとコンテナの単純再作成</a></h3>
+<p>ローカル環境においては、既に登録済みのデータを諦めることが出来るのであれば
+途中のバックアップやリストアの手順をスキップして単純にコンテナの再作成をすることでアップデートをすることも可能です。
+テストデータがseedで用意されているのであれば、よほど特殊なデータで無い限りは単純再作成でも良いかもしれません。</p>
 
                     </main>
 
@@ -167,6 +197,9 @@ PCをもう一台用意しますか？</p>
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
+                                                    <a rel="next" href="chapter_5.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         
                         <div style="clear: both"></div>
                     </nav>
@@ -178,6 +211,9 @@ PCをもう一台用意しますか？</p>
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
+                                    <a rel="next" href="chapter_5.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
                             </nav>
 
         </div>

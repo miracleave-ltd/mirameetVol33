@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="chapter_1.html">事の発端</a></li><li class="chapter-item expanded affix "><a href="chapter_2.html">Docker + VSCode で環境構築</a></li><li class="chapter-item expanded affix "><a href="chapter_3.html">外部連携のモック化</a></li><li class="chapter-item expanded affix "><a href="chapter_4.html">DBのバージョンアップ</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="chapter_1.html">はじめに</a></li><li class="chapter-item expanded affix "><a href="chapter_2.html">Docker + VSCode で環境構築</a></li><li class="chapter-item expanded affix "><a href="chapter_3.html">ケース１：外部連携のモック化</a></li><li class="chapter-item expanded affix "><a href="chapter_4.html">ケース２：DBのバージョンアップ</a></li><li class="chapter-item expanded affix "><a href="chapter_5.html">ローカル環境のCleanUp</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -145,76 +145,67 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="1-事の発端"><a class="header" href="#1-事の発端">1. 事の発端</a></h1>
+                        <h1 id="初心者向けdockerハンズオンrails環境構築を通してdockerの特徴に触れてみよう"><a class="header" href="#初心者向けdockerハンズオンrails環境構築を通してdockerの特徴に触れてみよう">初心者向けDockerハンズオン！Rails環境構築を通してDockerの特徴に触れてみよう！</a></h1>
 <!-- toc -->
-<h2 id="11-登場人物"><a class="header" href="#11-登場人物">1.1. 登場人物</a></h2>
-<p><strong>あなた</strong></p>
-<p>突然社内ツールのメンテを依頼されたエンジニアさん。
-十分な引き継ぎもなくプロジェクトにアサインされるが・・・？</p>
-<p><strong>長田</strong></p>
-<p>色々なプロジェクトを担当しているマネージャー。
-今回のプロジェクトの依頼主。</p>
-<p><strong>鈴木</strong></p>
-<p>このプロジェクトの前任者。育休の取得で突然の長期休暇に入る。</p>
-<p><strong>大友</strong></p>
-<p>色々なプロジェクトを担当しているエンジニア。
-様々なアドバイスをくれる救世主。</p>
-<p>※ この物語はフィクションであり、実在の人物・団体とは一切関係ありません</p>
-<h2 id="12-事の発端"><a class="header" href="#12-事の発端">1.2. 事の発端</a></h2>
-<p>都内某日...</p>
-<p>長田「今月からの担当を相談したい」</p>
-<p>あなた「はい、大丈夫です」</p>
-<p>長田「社内で使ってる Rails のツールについて、全担当の鈴木が育休で不在なので任せたい」</p>
-<p>あなた「わかりました、ドキュメントや環境構築手順はありますか？」</p>
-<p>長田「ドキュメント類はない。困ったら大友さんに相談してみて」</p>
-<p>あなた「ちょっと見てみます。」</p>
-<p>長田「申し訳ないが、急ぎで修正したいので今日中に環境構築を終わらせたいです」</p>
-<p>あなた「えぇ・・・」</p>
-<p>環境構築に挑みます。</p>
+<h2 id="事前準備"><a class="header" href="#事前準備">事前準備</a></h2>
+<ul>
+<li>VSCodeインストール</li>
+<li>Dockerインストール</li>
+<li>Gitインストール、GitHubアカウントの作成</li>
+</ul>
+<h2 id="今回の流れ環境構築--メール送信機能作成データベースバージョン変更"><a class="header" href="#今回の流れ環境構築--メール送信機能作成データベースバージョン変更">今回の流れ（環境構築 ～ メール送信機能作成、データベースバージョン変更）</a></h2>
+<p>Railsのスキャフォールディング機能を用いて、ユーザー登録と同時にメール送信を行うことの出来る画面を作成。</p>
+<p>その後、データベース（PostgreSQL）のバージョン変更を実施しDockerの特徴に触れていきます。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="2-docker--vscode-の構築"><a class="header" href="#2-docker--vscode-の構築">2. Docker + VSCode の構築</a></h1>
 <!-- toc -->
-<h2 id="21-プロジェクトのクローンvscodeの起動"><a class="header" href="#21-プロジェクトのクローンvscodeの起動">2.1. プロジェクトのクローン～VSCodeの起動</a></h2>
-<p>あなた「大友さん、このプロジェクト全然わかんないんですけどとりあえずどうしたらいいですかね？」</p>
-<p>大友「devcontainer.json があるのでクローンして VSCode で開いてみよう」</p>
-<pre><code>git clone https://github.com/miracleave-ltd/mirameetVol33.git
+<h2 id="21-プロジェクトのクローン"><a class="header" href="#21-プロジェクトのクローン">2.1. プロジェクトのクローン</a></h2>
+<p>githubページ：https://github.com/miracleave-ltd/mirameetVol33</p>
+<p><code>mirameetVol33-main.zip</code>を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像はWindowsの場合
+<img src="./img/chapter_2_1.png" alt="キャプチャ" /></p>
+<p><img src="./img/chapter_2_2.png" alt="キャプチャ2" /></p>
+<h2 id="22-mirameetvol33-mainフォルダに移動--vscodeで起動"><a class="header" href="#22-mirameetvol33-mainフォルダに移動--vscodeで起動">2.2. mirameetVol33-mainフォルダに移動 ～ VScodeで起動</a></h2>
+<pre><code># Windows
+cd C:\Users\mirameetVol33-main
+# Mac
+cd ~/mirameetVol33-main
 
-cd mirameetVol33
-
+# Windows・Mac共通
 code .
 </code></pre>
-<p>コンテナで再度開くを選択</p>
-<p><img src="./reopen-container.jpg" alt="reopen container" /></p>
-<p>ウインドウが表示されない場合は左下からコンテナで再度開く</p>
-<p><img src="./attache-environment.jpg" alt="attache-environment.jpg" />
-<img src="./reopen-container2.jpg" alt="reopen container2" /></p>
-<p>左下に開発コンテナと表示されていれば成功</p>
-<p><img src="./atacche-remote.jpg" alt="atacche-remote.jpg" /></p>
-<h2 id="22-開発コンテナーについて"><a class="header" href="#22-開発コンテナーについて">2.2. 開発コンテナーについて</a></h2>
-<p>あなた「コンテナで再度開くってなんですか？」</p>
-<p>大友「コンテナの中の VSCode に接続することだよ」</p>
-<p><img src="./devcontainer-image.jpg" alt="devcontainer image" /></p>
-<p>あなた「別の VSCode を開いてるってことはプラグインも入れ直しですか？」</p>
-<p>大友「devcontainer.json にプラグインの設定があるので不要」</p>
-<p><img src="./plugins.jpg" alt="plugins" /></p>
-<p>大友「実行設定の Debug v33 web から Rails を起動する」</p>
+<h2 id="23-コンテナ内のフォルダをvscodeで開く"><a class="header" href="#23-コンテナ内のフォルダをvscodeで開く">2.3. コンテナ内のフォルダをVSCodeで開く</a></h2>
+<p>Dev Container拡張機能を利用し、コンテナ内のVScodeに接続します。</p>
+<p>・コンテナで再度開くを選択</p>
+<p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
+<p>・ウインドウが表示されない場合は左下からコンテナで再度開く</p>
+<p><img src="./img/attache-environment.jpg" alt="attache-environment.jpg" />
+<img src="./img/reopen-container2.jpg" alt="reopen container2" /></p>
+<p>・左下に開発コンテナと表示されていれば成功です</p>
+<p><img src="./img/atacche-remote.jpg" alt="atacche-remote.jpg" /></p>
+<h2 id="補足開発コンテナーについて"><a class="header" href="#補足開発コンテナーについて">補足：開発コンテナーについて</a></h2>
+<p><img src="./img/devcontainer-image.jpg" alt="devcontainer image" /></p>
+<p>別のVSCodeが立ち上がるが、devcontainer.json の設定によりプラグインの入れなおしは不要</p>
+<p><img src="./img/plugins.jpg" alt="plugins" /></p>
+<h2 id="24-railsプロジェクトを起動"><a class="header" href="#24-railsプロジェクトを起動">2.4. Railsプロジェクトを起動</a></h2>
+<p>実行設定の Debug v33 web から Rails を起動する
+<img src="./img/chapter_2_3.png" alt="キャプチャ3" /></p>
 <p><code>http://localhost:3000/</code></p>
-<p>画面が表示されれば環境構築完了</p>
-<h2 id="23-各ファイルの解説"><a class="header" href="#23-各ファイルの解説">2.3. 各ファイルの解説</a></h2>
+<p>画面が表示されれば環境構築は完了となります</p>
+<h2 id="補足各ファイルの解説"><a class="header" href="#補足各ファイルの解説">補足：各ファイルの解説</a></h2>
 <p><strong>Dockerfile</strong></p>
 <p>元になるイメージと変更する手順を記述する。
 今回は ruby のバージョン 3.2.2 を指定しています。
 また、Docker イメージのビルドはキャッシュが利用できるので <code>Gemfile</code> を先に追加して <code>bundle install</code> をすることにより、時間のかかるインストール処理をキャッシュすることができます。</p>
 <p><strong>docker-compose.yml</strong></p>
 <p>複数のコンテナをまとめて管理するための定義です。
-今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, ドキュメントページを起動する <code>v33_doc</code> の3つのコンテナを定義しています。</p>
-<p>※ファイル内容の細かい解説が必要？</p>
+今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, メールサーバーを起動する <code>v33_mail</code> の3つのコンテナを定義しています。</p>
 <p><strong>.devcontainer/devcontainer.json</strong></p>
 <p>コンテナ内の VSCode についての定義です。
 VSCode を起動するコンテナの指定やインストールするプラグインを定義できます。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="3-外部連携のモック化"><a class="header" href="#3-外部連携のモック化">3. 外部連携のモック化</a></h1>
-<p>MailHog という開発用メールサーバーを利用して簡単なメール送信機能を作成して
+<!-- toc -->
+<p><code>mailhog</code> という開発用メールサーバーを利用して簡単なメール送信機能を作成して
 動作の確認が出来るかを確認しましょう！</p>
-<p>MailHogはdocker-compose.ymlの以下部分に定義されていてDevContainer起動時点で
+<p>mailhogはdocker-compose.ymlの以下部分に定義されていてDevContainer起動時点で
 既に環境が作成されており使用できる状態です。</p>
 <pre><code>  v33_mail:
     container_name: v33_mail
@@ -223,7 +214,7 @@ VSCode を起動するコンテナの指定やインストールするプラグ�
       - &quot;8025:8025&quot;
 </code></pre>
 <h3 id="ユーザー画面管理画面作成"><a class="header" href="#ユーザー画面管理画面作成">ユーザー画面管理画面作成</a></h3>
-<p>RailsのScaffolding機能を使用して、簡単なユーザー画面を作成します。
+<p>Railsのscaffold機能を使用して、簡単なユーザー画面を作成します。
 以下コマンドを実施します。</p>
 <pre><code class="language-Ruby">rails g scaffold User name:string email:string
 </code></pre>
@@ -236,13 +227,13 @@ VSCode を起動するコンテナの指定やインストールするプラグ�
 <p>作成されたuser_mailer.rbを以下の通り修正します。</p>
 <p>・user_mailer.rb</p>
 <pre><code>class UserMailer &lt; ApplicationMailer
-  default from: 'noreply@example.com'
+  default from: 'noreply@meetup.com'
 
   def welcome_email
     @user = params[:user]
 
     mail(
-      subject: 'ご登録ありがとうございます',
+      subject: '登録完了',
       to: @user.email
     )
   end
@@ -256,18 +247,18 @@ end
 
 新規登録ありがとうございます。
 
-引き続き当サイトをお楽しみください。
+引き続きミートアップをお楽しみください。
 
 </code></pre>
 <p>app/controllers/users_controller.rb
 を以下の追記と記載された部分のみ追記。</p>
-<pre><code># POST /users or /users.json
+<pre><code class="language-diff"># POST /users or /users.json
 def create
   @user = User.new(user_params)
 
   respond_to do |format|
     if @user.save
-      UserMailer.with(user: @user).welcome_email.deliver_later # 追記
++      UserMailer.with(user: @user).welcome_email.deliver_later
       format.html { redirect_to user_url(@user), notice: &quot;User was successfully created.&quot; }
       format.json { render :show, status: :created, location: @user }
     else
@@ -282,26 +273,108 @@ end
 <pre><code>config.action_mailer.delivery_method = :smtp
 config.action_mailer.smtp_settings = { address: 'mailhog', port: 1025 }
 </code></pre>
-<p>ここまでで以下アドレスからユーザー画面を確認してみましょう。
+<p>以下アドレスからユーザー画面を確認してみましょう。
 http://localhost:3000/users/</p>
-<p>メール送信して Mailhog から内容が確認出来るか確認しましょう！
+<p>メール送信して mailhog から内容が確認出来るか確認しましょう！
 http://localhost:8025/</p>
-<p>※
-Railsの場合はletter_openerというGemが存在するのでそちらを使用しても同等の操作をすることが可能です。</p>
+<h3 id="補足その他開発用のメールサーバーについて"><a class="header" href="#補足その他開発用のメールサーバーについて">補足：その他開発用のメールサーバーについて</a></h3>
+<p>Railsの場合はletter_openerというGemが存在するのでそちらを使用しても同等の操作をすることが可能です。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="4-dbのバージョンアップ"><a class="header" href="#4-dbのバージョンアップ">4. DBのバージョンアップ</a></h1>
 <!-- toc -->
 <h2 id="41-別バージョンのdbを起動"><a class="header" href="#41-別バージョンのdbを起動">4.1 別バージョンのDBを起動</a></h2>
-<p>Dockerで環境構築するメリットとして、ミドルウェアのバージョンアップ等も容易に実施することが出来ることです。
+<p>Dockerで環境構築するメリットとして、ミドルウェアのバージョンアップ等も容易に実施することが出来ることが挙げられます。
 現在PostgreSQL13で起動しているので、こちらを15にアップデートしてみましょう。</p>
 <p>ローカル環境に直接PostgreSQLがインストールされている場合は、単純にpg_upgradeすれば良い場面もあるかもしれませんが、
-例えば、案件A：ver13、案件B：ver13の状態で案件Aだけ15に上げたいという状況だといかがでしょう？
-PCをもう一台用意しますか？</p>
-<p>データ移行ツールと新DBでの動作確認を行う</p>
-<p>新旧バージョンのDBコンテナを起動</p>
-<p>移行を試す</p>
-<p>新DBのみ起動</p>
-<p>動作確認</p>
-<p>完了</p>
+例えば、案件A：ver13、案件B：ver13の状態で案件Aだけ15に上げたいという状況だといかがでしょう？</p>
+<h3 id="バックアップを取得"><a class="header" href="#バックアップを取得">バックアップを取得</a></h3>
+<p>バージョン13のコンテナからバックアップを取得します。
+以下をコマンドプロンプトより実行します。</p>
+<pre><code class="language-bash">docker-compose exec db pg_dumpall --clean --username postgres &gt; backup.sql
+</code></pre>
+<p>その後データベースコンテナの削除を行います。</p>
+<pre><code class="language-bash">docker container ls -a
+docker container rm [コンテナID]
+</code></pre>
+<p>ボリュームも同様に削除します。</p>
+<pre><code class="language-bash">docker volume ls
+docker volume remove v33-volume
+</code></pre>
+<h3 id="バージョンをアップデート"><a class="header" href="#バージョンをアップデート">バージョンをアップデート</a></h3>
+<p>※並行して稼働させるなら順番等考える必要あり。</p>
+<pre><code class="language-diff">  v33_db:
+    container_name: v33_db
+-    image: postgres:13
++    image: postgres:15
+    ports:
+      - &quot;5432:5432&quot;
+    volumes:
+      - v33-volume:/var/lib/postgresql/data
+    environment:
+      - TZ=Asia/Tokyo
+      - POSTGRES_USER=v33
+      - POSTGRES_PASSWORD=meetupv33
+</code></pre>
+<p>その後、一度dev containerの接続を閉じて、再度ReOpen Containerする。</p>
+<h3 id="リストア"><a class="header" href="#リストア">リストア</a></h3>
+<pre><code class="language-bash">cat backup.sql | docker-compose exec -T v33_db psql --username v33
+</code></pre>
+<p>ユーザーの登録が出来るか動作確認をして問題無ければDBのバージョンアップは完了となります。</p>
+<h3 id="補足ボリュームとコンテナの単純再作成"><a class="header" href="#補足ボリュームとコンテナの単純再作成">補足：ボリュームとコンテナの単純再作成</a></h3>
+<p>ローカル環境においては、既に登録済みのデータを諦めることが出来るのであれば
+途中のバックアップやリストアの手順をスキップして単純にコンテナの再作成をすることでアップデートをすることも可能です。
+テストデータがseedで用意されているのであれば、よほど特殊なデータで無い限りは単純再作成でも良いかもしれません。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ローカル環境のcleanup"><a class="header" href="#ローカル環境のcleanup">ローカル環境のCleanUp</a></h1>
+<!-- toc -->
+<p>最後に構築したDocker環境の削除を行います。</p>
+<h2 id="コンテナの停止"><a class="header" href="#コンテナの停止">コンテナの停止</a></h2>
+<p>次のコマンドを実行し、コンテナの状態を確認します。</p>
+<pre><code class="language-sh">docker container ls -a
+
+# CONTAINER ID   IMAGE                           COMMAND                  CREATED        STATUS                      PORTS                                 NAMES
+# b173bb2c3e2e   mirameetvol33_v33_web           &quot;/bin/sh -c 'echo Co…&quot;   3 days ago     Up 25 minutes               0.0.0.0:3000-&gt;3000/tcp                v33_web
+# 23f502d1c58a   postgres:13                     &quot;docker-entrypoint.s…&quot;   3 days ago     Exited (137) 2 days ago                                           v33_db
+# 901edcf563d4   mailhog/mailhog                 &quot;MailHog&quot;                3 days ago     Exited (2) 2 days ago                                             v33_mail
+</code></pre>
+<p>上記で確認できた<code>CONTAINER ID</code>を次のコマンドで利用し、コンテナを停止します。</p>
+<pre><code class="language-sh">docker container stop [CONTAINER ID]
+</code></pre>
+<h2 id="イメージの削除"><a class="header" href="#イメージの削除">イメージの削除</a></h2>
+<p>次のコマンドを実行し、作成したコンテナイメージを確認します。</p>
+<pre><code class="language-sh">docker image ls
+
+# REPOSITORY              TAG             IMAGE ID       CREATED         SIZE
+# mirameetvol33_v33_web   latest          40dc866fa6c0   4 days ago      1.08GB
+# postgres                13              efc790b27960   13 days ago     407MB
+# mailhog/mailhog         latest          4de68494cd0d   3 years ago     392MB
+</code></pre>
+<p>上記で確認できた<code>IMAGE ID</code>を利用して、ビルドされたイメージを削除します。</p>
+<pre><code class="language-sh">docker image rm -f [IMAGE ID]
+</code></pre>
+<p>次のようなメッセージが確認できたら、イメージが正常に削除出来ています。</p>
+<blockquote>
+<p>Untagged: mirameetvol33_v33_web...</p>
+</blockquote>
+<h2 id="フォルダの削除"><a class="header" href="#フォルダの削除">フォルダの削除</a></h2>
+<p>最後にフォルダを削除します。</p>
+<h3 id="macの場合"><a class="header" href="#macの場合">Macの場合</a></h3>
+<pre><code class="language-sh"># 一つ上の階層に移動
+cd ../
+# mirameetVol33-mainフォルダが存在しているかを確認
+ls
+# mirameetVol33-mainフォルダが存在している場合、下記コマンドを実行しフォルダを削除
+rm -rf mirameetVol33-main
+</code></pre>
+<h3 id="windowsの場合"><a class="header" href="#windowsの場合">Windowsの場合</a></h3>
+<pre><code class="language-sh"># 一つ上の階層に移動
+cd ../
+# mirameetVol33-mainフォルダが存在しているかを確認
+dir
+# mirameetVol33-mainフォルダが存在している場合、下記コマンドを実行しフォルダを削除
+rd /s /q mirameetVol33-main
+# PowerShellをご使用の方はこちらのコマンドをご使用下さい
+Remove-Item mirameetVol33-main -Recurse -Force
+</code></pre>
+<p>以上。</p>
 
                     </main>
 
