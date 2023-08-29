@@ -72,14 +72,14 @@ touch app/views/user_mailer/welcome_email.text.erb
 app/controllers/users_controller.rb
 を以下の追記と記載された部分のみ追記。
 
-```
+```diff
 # POST /users or /users.json
 def create
   @user = User.new(user_params)
 
   respond_to do |format|
     if @user.save
-      UserMailer.with(user: @user).welcome_email.deliver_later # ★追記★
++      UserMailer.with(user: @user).welcome_email.deliver_later
       format.html { redirect_to user_url(@user), notice: "User was successfully created." }
       format.json { render :show, status: :created, location: @user }
     else
