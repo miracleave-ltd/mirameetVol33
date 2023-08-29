@@ -1,4 +1,5 @@
-- [事の発端](./chapter_1.md)
+- [はじめに](./chapter_1.md)
 - [Docker + VSCode で環境構築](./chapter_2.md)
-- [外部連携のモック化](./chapter_3.md)
-- [DBのバージョンアップ](./chapter_4.md)
+- [ケース１：外部連携のモック化](./chapter_3.md)
+- [ケース２：DBのバージョンアップ](./chapter_4.md)
+- [ローカル環境のCleanUp](./chapter_5.md)

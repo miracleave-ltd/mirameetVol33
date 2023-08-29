@@ -2,56 +2,64 @@
 
 <!-- toc -->
 
-## 2.1. プロジェクトのクローン～VSCodeの起動
+## 2.1. プロジェクトのクローン
 
-あなた「大友さん、このプロジェクト全然わかんないんですけどとりあえずどうしたらいいですかね？」
+githubページ：https://github.com/miracleave-ltd/mirameetVol33
 
-大友「devcontainer.json があるのでクローンして VSCode で開いてみよう」
+`mirameetVol33-main.zip`を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像はWindowsの場合
+![キャプチャ](./img/chapter_2_1.png)
+
+![キャプチャ2](./img/chapter_2_2.png)
+
+## 2.2. mirameetVol33-mainフォルダに移動 ～ VScodeで起動
 
 ```
-git clone https://github.com/miracleave-ltd/mirameetVol33.git
+# Windows
+cd C:\Users\mirameetVol33-main
+# Mac
+cd ~/mirameetVol33-main
 
-cd mirameetVol33
-
+# Windows・Mac共通
 code .
 ```
 
-コンテナで再度開くを選択
+## 2.3. コンテナ内のフォルダをVSCodeで開く
 
-![reopen container](./reopen-container.jpg)
+Dev Container拡張機能を利用し、コンテナ内のVScodeに接続します。
 
-ウインドウが表示されない場合は左下からコンテナで再度開く
+・コンテナで再度開くを選択
 
-![attache-environment.jpg](./attache-environment.jpg)
-![reopen container2](./reopen-container2.jpg)
+![reopen container](./img/reopen-container.jpg)
 
-左下に開発コンテナと表示されていれば成功
+・ウインドウが表示されない場合は左下からコンテナで再度開く
 
-![atacche-remote.jpg](./atacche-remote.jpg)
+![attache-environment.jpg](./img/attache-environment.jpg)
+![reopen container2](./img/reopen-container2.jpg)
+
+・左下に開発コンテナと表示されていれば成功です
+
+![atacche-remote.jpg](./img/atacche-remote.jpg)
 
 
-## 2.2. 開発コンテナーについて
+## 補足：開発コンテナーについて
 
-あなた「コンテナで再度開くってなんですか？」
+![devcontainer image](./img/devcontainer-image.jpg)
 
-大友「コンテナの中の VSCode に接続することだよ」
+別のVSCodeが立ち上がるが、devcontainer.json の設定によりプラグインの入れなおしは不要
 
-![devcontainer image](./devcontainer-image.jpg)
+![plugins](./img/plugins.jpg)
 
-あなた「別の VSCode を開いてるってことはプラグインも入れ直しですか？」
+## 2.4. Railsプロジェクトを起動
 
-大友「devcontainer.json にプラグインの設定があるので不要」
-
-![plugins](./plugins.jpg)
-
-大友「実行設定の Debug v33 web から Rails を起動する」
+実行設定の Debug v33 web から Rails を起動する
+![キャプチャ3](./img/chapter_2_3.png)
 
 `http://localhost:3000/`
 
-画面が表示されれば環境構築完了
+画面が表示されれば環境構築は完了となります
 
 
-## 2.3. 各ファイルの解説
+## 補足：各ファイルの解説
 
 **Dockerfile**
 
@@ -62,9 +70,7 @@ code .
 **docker-compose.yml**
 
 複数のコンテナをまとめて管理するための定義です。
-今回は DB のコンテナである `v33_db`, Rails を起動する `v33_web`, ドキュメントページを起動する `v33_doc` の3つのコンテナを定義しています。
-
-※ファイル内容の細かい解説が必要？
+今回は DB のコンテナである `v33_db`, Rails を起動する `v33_web`, メールサーバーを起動する `v33_mail` の3つのコンテナを定義しています。
 
 **.devcontainer/devcontainer.json**
 

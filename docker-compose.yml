@@ -33,18 +33,6 @@ services:
     depends_on:
       - v33_db
 
-  v33_doc:
-    container_name: v33_doc
-    image: "peaceiris/mdbook:v0.4.34-rust"
-    stdin_open: true
-    command: serve --hostname '0.0.0.0'
-    tty: true
-    ports:
-      - 4000:3000
-      - 4001:3001
-    volumes:
-      - ./doc:/book
-
   v33_mail:
     container_name: v33_mail
     image: mailhog/mailhog

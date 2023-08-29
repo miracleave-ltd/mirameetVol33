@@ -1,9 +1,11 @@
 # 3. 外部連携のモック化
 
-MailHog という開発用メールサーバーを利用して簡単なメール送信機能を作成して
+<!-- toc -->
+
+`mailhog` という開発用メールサーバーを利用して簡単なメール送信機能を作成して
 動作の確認が出来るかを確認しましょう！
 
-MailHogはdocker-compose.ymlの以下部分に定義されていてDevContainer起動時点で
+mailhogはdocker-compose.ymlの以下部分に定義されていてDevContainer起動時点で
 既に環境が作成されており使用できる状態です。
 
 ```
@@ -14,9 +16,8 @@ MailHogはdocker-compose.ymlの以下部分に定義されていてDevContainer�
       - "8025:8025"
 ```
 
-
 ### ユーザー画面管理画面作成
-RailsのScaffolding機能を使用して、簡単なユーザー画面を作成します。
+Railsのscaffold機能を使用して、簡単なユーザー画面を作成します。
 以下コマンドを実施します。
 
 ```Ruby
@@ -40,13 +41,13 @@ rails generate mailer User
 ・user_mailer.rb
 ```
 class UserMailer < ApplicationMailer
-  default from: 'noreply@example.com'
+  default from: 'noreply@meetup.com'
 
   def welcome_email
     @user = params[:user]
 
     mail(
-      subject: 'ご登録ありがとうございます',
+      subject: '登録完了',
       to: @user.email
     )
   end
@@ -64,7 +65,7 @@ touch app/views/user_mailer/welcome_email.text.erb
 
 新規登録ありがとうございます。
 
-引き続き当サイトをお楽しみください。
+引き続きミートアップをお楽しみください。
 
 ```
 
@@ -78,7 +79,7 @@ def create
 
   respond_to do |format|
     if @user.save
-      UserMailer.with(user: @user).welcome_email.deliver_later # 追記
+      UserMailer.with(user: @user).welcome_email.deliver_later # ★追記★
       format.html { redirect_to user_url(@user), notice: "User was successfully created." }
       format.json { render :show, status: :created, location: @user }
     else
@@ -96,12 +97,14 @@ config.action_mailer.delivery_method = :smtp
 config.action_mailer.smtp_settings = { address: 'mailhog', port: 1025 }
 ```
 
-ここまでで以下アドレスからユーザー画面を確認してみましょう。
+以下アドレスからユーザー画面を確認してみましょう。
 http://localhost:3000/users/
 
 
-メール送信して Mailhog から内容が確認出来るか確認しましょう！
+メール送信して mailhog から内容が確認出来るか確認しましょう！
 http://localhost:8025/
 
-※
+
+### 補足：その他開発用のメールサーバーについて
 Railsの場合はletter_openerというGemが存在するのでそちらを使用しても同等の操作をすることが可能です。
+
