@@ -4,14 +4,14 @@
 
 ## 2.1. プロジェクトのクローン
 
-githubページ：https://github.com/miracleave-ltd/mirameetVol33
+github ページ：https://github.com/miracleave-ltd/mirameetVol33
 
-`mirameetVol33-main.zip`を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像はWindowsの場合
+`mirameetVol33-main.zip`を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像は Windows の場合
 ![キャプチャ](./img/chapter_2_1.png)
 
 ![キャプチャ2](./img/chapter_2_2.png)
 
-## 2.2. mirameetVol33-mainフォルダに移動 ～ VScodeで起動
+## 2.2. mirameetVol33-main フォルダに移動 ～ VScode で起動
 
 ```
 # Windows
@@ -23,9 +23,9 @@ cd ~/mirameetVol33-main
 code .
 ```
 
-## 2.3. コンテナ内のフォルダをVSCodeで開く
+## 2.3. コンテナ内のフォルダを VSCode で開く
 
-Dev Container拡張機能を利用し、コンテナ内のVScodeに接続します。
+Dev Container 拡張機能を利用し、コンテナ内の VScode に接続します。
 
 ・コンテナで再度開くを選択
 
@@ -40,24 +40,28 @@ Dev Container拡張機能を利用し、コンテナ内のVScodeに接続しま�
 
 ![atacche-remote.jpg](./img/atacche-remote.jpg)
 
-
 ## 補足：開発コンテナーについて
 
 ![devcontainer image](./img/devcontainer-image.jpg)
 
-別のVSCodeが立ち上がるが、devcontainer.json の設定によりプラグインの入れなおしは不要
+2.2 で開いたものとは別の VSCode が立ち上がるが、devcontainer.json の設定によりプラグインのインストールし直しは不要
 
 ![plugins](./img/plugins.jpg)
 
-## 2.4. Railsプロジェクトを起動
+## 2.4. Rails プロジェクトを起動
 
-実行設定の Debug v33 web から Rails を起動する
+ターミナルにて、以下コマンドを実行しデータベースの作成を行う
+
+```ruby
+rails db:create
+```
+
+その後、実行設定の Debug v33 web から Rails を起動する
 ![キャプチャ3](./img/chapter_2_3.png)
 
+以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります
 `http://localhost:3000/`
-
-画面が表示されれば環境構築は完了となります
-
+![キャプチャ4](./img/chapter_2_4.png)
 
 ## 補足：各ファイルの解説
 
@@ -65,12 +69,13 @@ Dev Container拡張機能を利用し、コンテナ内のVScodeに接続しま�
 
 元になるイメージと変更する手順を記述する。
 今回は ruby のバージョン 3.2.2 を指定しています。
-また、Docker イメージのビルドはキャッシュが利用できるので `Gemfile` を先に追加して `bundle install` をすることにより、時間のかかるインストール処理をキャッシュすることができます。
+また、Docker イメージのビルドはキャッシュが利用できるので `Gemfile` を先に追加して `bundle install` をすることにより
+時間のかかるインストール処理をキャッシュすることができます。
 
 **docker-compose.yml**
 
 複数のコンテナをまとめて管理するための定義です。
-今回は DB のコンテナである `v33_db`, Rails を起動する `v33_web`, メールサーバーを起動する `v33_mail` の3つのコンテナを定義しています。
+今回は DB のコンテナである `v33_db`, Rails を起動する `v33_web`, メールサーバーを起動する `v33_mail` の 3 つのコンテナを定義しています。
 
 **.devcontainer/devcontainer.json**
 

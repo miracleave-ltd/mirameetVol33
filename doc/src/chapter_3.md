@@ -3,9 +3,9 @@
 <!-- toc -->
 
 `mailhog` という開発用メールサーバーを利用して簡単なメール送信機能を作成して
-動作の確認が出来るかを確認しましょう！
+動作の確認が出来るかを確認しましょう
 
-mailhogはdocker-compose.ymlの以下部分に定義されていてDevContainer起動時点で
+mailhog は docker-compose.yml の以下部分に定義されていて DevContainer 起動時点で
 既に環境が作成されており使用できる状態です。
 
 ```
@@ -17,14 +17,16 @@ mailhogはdocker-compose.ymlの以下部分に定義されていてDevContainer�
 ```
 
 ### ユーザー画面管理画面作成
-Railsのscaffold機能を使用して、簡単なユーザー画面を作成します。
-以下コマンドを実施します。
+
+Rails の scaffold 機能を使用して、簡単なユーザー画面を作成します。
+
+はじめに以下コマンドを実施します。
 
 ```Ruby
 rails g scaffold User name:string email:string
 ```
 
-その後マイグレーションしましょう。
+その後マイグレーションをしましょう。
 
 ```Ruby
 rails db:migrate
@@ -32,13 +34,16 @@ rails db:migrate
 
 ### メール送信機能追加
 
+Rails 組み込みの ActionMailer を使いメール機能の実装をします。
+
 ```
 rails generate mailer User
 ```
 
-作成されたuser_mailer.rbを以下の通り修正します。
+作成された user_mailer.rb を以下の通り修正します。
 
 ・user_mailer.rb
+
 ```
 class UserMailer < ApplicationMailer
   default from: 'noreply@meetup.com'
@@ -54,12 +59,14 @@ class UserMailer < ApplicationMailer
 end
 ```
 
-メール本文を作成
+メールの本文に設定する内容を記載します。
+
 ```
 touch app/views/user_mailer/welcome_email.text.erb
 ```
 
 作成されたメール本文定義ファイルに以下の通り記載しましょう。
+
 ```
 <%= @user.name %>様
 
@@ -70,7 +77,7 @@ touch app/views/user_mailer/welcome_email.text.erb
 ```
 
 app/controllers/users_controller.rb
-を以下の追記と記載された部分のみ追記。
+を以下の差分の追加行のみ追記します。
 
 ```diff
 # POST /users or /users.json
@@ -91,20 +98,23 @@ end
 ```
 
 config/enviroments/development.rb
-に以下２行のメール送信用設定値を追加
+に以下２行のメール送信用設定値を追加し準備完了です。
+
 ```
 config.action_mailer.delivery_method = :smtp
 config.action_mailer.smtp_settings = { address: 'mailhog', port: 1025 }
 ```
 
 以下アドレスからユーザー画面を確認してみましょう。
+
 http://localhost:3000/users/
 
+任意のユーザーを登録した後にメールが送信されます。
 
-メール送信して mailhog から内容が確認出来るか確認しましょう！
+mailhog から内容を確認してみましょう！
+
 http://localhost:8025/
 
-
 ### 補足：その他開発用のメールサーバーについて
-Railsの場合はletter_openerというGemが存在するのでそちらを使用しても同等の操作をすることが可能です。
 
+Rails の場合は letter_opener という Gem が存在しますので、こちらもメール開発を行う際の選択肢の一つに挙げられます。
