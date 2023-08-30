@@ -144,15 +144,16 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="4-dbのバージョンアップ"><a class="header" href="#4-dbのバージョンアップ">4. DBのバージョンアップ</a></h1>
+                        <h1 id="4-db-のバージョンアップ"><a class="header" href="#4-db-のバージョンアップ">4. DB のバージョンアップ</a></h1>
 <!-- toc -->
-<h2 id="41-別バージョンのdbを起動"><a class="header" href="#41-別バージョンのdbを起動">4.1 別バージョンのDBを起動</a></h2>
-<p>Dockerで環境構築するメリットとして、ミドルウェアのバージョンアップ等も容易に実施することが出来ることが挙げられます。
-現在PostgreSQL13で起動しているので、こちらを15にアップデートしてみましょう。</p>
-<p>ローカル環境に直接PostgreSQLがインストールされている場合は、単純にpg_upgradeすれば良い場面もあるかもしれませんが、
-例えば、案件A：ver13、案件B：ver13の状態で案件Aだけ15に上げたいという状況だといかがでしょう？</p>
+<h2 id="41-別バージョンの-db-を起動"><a class="header" href="#41-別バージョンの-db-を起動">4.1 別バージョンの DB を起動</a></h2>
+<p>Docker で環境構築するメリットとして、ミドルウェアのバージョンアップを容易に実施することが出来ることが挙げられます。</p>
+<p>ローカル環境に直接 PostgreSQL がインストールされている場合は、単純に pg_upgrade すれば良い場面もあるかもしれませんが、
+例えば、案件 A：ver13、案件 B：ver13 の状態で案件 A だけ 15 にアップデートしたい！ という状況だといかがでしょう？</p>
+<p>PC を複数台用意する訳にも行かず困ってしまいますよね？</p>
+<p>現在 PostgreSQL13 で当システムは起動しているので、15 にアップデートしてみましょう。</p>
 <h3 id="バックアップを取得"><a class="header" href="#バックアップを取得">バックアップを取得</a></h3>
-<p>バージョン13のコンテナからバックアップを取得します。
+<p>バージョン 13 のコンテナからバックアップを取得します。
 以下をコマンドプロンプトより実行します。</p>
 <pre><code class="language-bash">docker-compose exec db pg_dumpall --clean --username postgres &gt; backup.sql
 </code></pre>
@@ -179,15 +180,15 @@ docker volume remove v33-volume
       - POSTGRES_USER=v33
       - POSTGRES_PASSWORD=meetupv33
 </code></pre>
-<p>その後、一度dev containerの接続を閉じて、再度ReOpen Containerする。</p>
+<p>その後、一度 dev container の接続を閉じて、再度 ReOpen Container する。</p>
 <h3 id="リストア"><a class="header" href="#リストア">リストア</a></h3>
 <pre><code class="language-bash">cat backup.sql | docker-compose exec -T v33_db psql --username v33
 </code></pre>
-<p>ユーザーの登録が出来るか動作確認をして問題無ければDBのバージョンアップは完了となります。</p>
+<p>ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。</p>
 <h3 id="補足ボリュームとコンテナの単純再作成"><a class="header" href="#補足ボリュームとコンテナの単純再作成">補足：ボリュームとコンテナの単純再作成</a></h3>
 <p>ローカル環境においては、既に登録済みのデータを諦めることが出来るのであれば
 途中のバックアップやリストアの手順をスキップして単純にコンテナの再作成をすることでアップデートをすることも可能です。
-テストデータがseedで用意されているのであれば、よほど特殊なデータで無い限りは単純再作成でも良いかもしれません。</p>
+テストデータが seed で用意されているのであれば、よほど特殊なデータで無い限りは単純再作成でも良いかもしれません。</p>
 
                     </main>
 

@@ -147,11 +147,11 @@
                         <h1 id="2-docker--vscode-の構築"><a class="header" href="#2-docker--vscode-の構築">2. Docker + VSCode の構築</a></h1>
 <!-- toc -->
 <h2 id="21-プロジェクトのクローン"><a class="header" href="#21-プロジェクトのクローン">2.1. プロジェクトのクローン</a></h2>
-<p>githubページ：https://github.com/miracleave-ltd/mirameetVol33</p>
-<p><code>mirameetVol33-main.zip</code>を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像はWindowsの場合
+<p>github ページ：https://github.com/miracleave-ltd/mirameetVol33</p>
+<p><code>mirameetVol33-main.zip</code>を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像は Windows の場合
 <img src="./img/chapter_2_1.png" alt="キャプチャ" /></p>
 <p><img src="./img/chapter_2_2.png" alt="キャプチャ2" /></p>
-<h2 id="22-mirameetvol33-mainフォルダに移動--vscodeで起動"><a class="header" href="#22-mirameetvol33-mainフォルダに移動--vscodeで起動">2.2. mirameetVol33-mainフォルダに移動 ～ VScodeで起動</a></h2>
+<h2 id="22-mirameetvol33-main-フォルダに移動--vscode-で起動"><a class="header" href="#22-mirameetvol33-main-フォルダに移動--vscode-で起動">2.2. mirameetVol33-main フォルダに移動 ～ VScode で起動</a></h2>
 <pre><code># Windows
 cd C:\Users\mirameetVol33-main
 # Mac
@@ -160,8 +160,8 @@ cd ~/mirameetVol33-main
 # Windows・Mac共通
 code .
 </code></pre>
-<h2 id="23-コンテナ内のフォルダをvscodeで開く"><a class="header" href="#23-コンテナ内のフォルダをvscodeで開く">2.3. コンテナ内のフォルダをVSCodeで開く</a></h2>
-<p>Dev Container拡張機能を利用し、コンテナ内のVScodeに接続します。</p>
+<h2 id="23-コンテナ内のフォルダを-vscode-で開く"><a class="header" href="#23-コンテナ内のフォルダを-vscode-で開く">2.3. コンテナ内のフォルダを VSCode で開く</a></h2>
+<p>Dev Container 拡張機能を利用し、コンテナ内の VScode に接続します。</p>
 <p>・コンテナで再度開くを選択</p>
 <p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
 <p>・ウインドウが表示されない場合は左下からコンテナで再度開く</p>
@@ -171,21 +171,26 @@ code .
 <p><img src="./img/atacche-remote.jpg" alt="atacche-remote.jpg" /></p>
 <h2 id="補足開発コンテナーについて"><a class="header" href="#補足開発コンテナーについて">補足：開発コンテナーについて</a></h2>
 <p><img src="./img/devcontainer-image.jpg" alt="devcontainer image" /></p>
-<p>別のVSCodeが立ち上がるが、devcontainer.json の設定によりプラグインの入れなおしは不要</p>
+<p>2.2 で開いたものとは別の VSCode が立ち上がるが、devcontainer.json の設定によりプラグインのインストールし直しは不要</p>
 <p><img src="./img/plugins.jpg" alt="plugins" /></p>
-<h2 id="24-railsプロジェクトを起動"><a class="header" href="#24-railsプロジェクトを起動">2.4. Railsプロジェクトを起動</a></h2>
-<p>実行設定の Debug v33 web から Rails を起動する
+<h2 id="24-rails-プロジェクトを起動"><a class="header" href="#24-rails-プロジェクトを起動">2.4. Rails プロジェクトを起動</a></h2>
+<p>ターミナルにて、以下コマンドを実行しデータベースの作成を行う</p>
+<pre><code class="language-ruby">rails db:create
+</code></pre>
+<p>その後、実行設定の Debug v33 web から Rails を起動する
 <img src="./img/chapter_2_3.png" alt="キャプチャ3" /></p>
-<p><code>http://localhost:3000/</code></p>
-<p>画面が表示されれば環境構築は完了となります</p>
+<p>以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります
+<code>http://localhost:3000/</code>
+<img src="./img/chapter_2_4.png" alt="キャプチャ4" /></p>
 <h2 id="補足各ファイルの解説"><a class="header" href="#補足各ファイルの解説">補足：各ファイルの解説</a></h2>
 <p><strong>Dockerfile</strong></p>
 <p>元になるイメージと変更する手順を記述する。
 今回は ruby のバージョン 3.2.2 を指定しています。
-また、Docker イメージのビルドはキャッシュが利用できるので <code>Gemfile</code> を先に追加して <code>bundle install</code> をすることにより、時間のかかるインストール処理をキャッシュすることができます。</p>
+また、Docker イメージのビルドはキャッシュが利用できるので <code>Gemfile</code> を先に追加して <code>bundle install</code> をすることにより
+時間のかかるインストール処理をキャッシュすることができます。</p>
 <p><strong>docker-compose.yml</strong></p>
 <p>複数のコンテナをまとめて管理するための定義です。
-今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, メールサーバーを起動する <code>v33_mail</code> の3つのコンテナを定義しています。</p>
+今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, メールサーバーを起動する <code>v33_mail</code> の 3 つのコンテナを定義しています。</p>
 <p><strong>.devcontainer/devcontainer.json</strong></p>
 <p>コンテナ内の VSCode についての定義です。
 VSCode を起動するコンテナの指定やインストールするプラグインを定義できます。</p>

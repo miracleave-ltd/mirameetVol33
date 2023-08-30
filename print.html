@@ -159,11 +159,11 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="2-docker--vscode-の構築"><a class="header" href="#2-docker--vscode-の構築">2. Docker + VSCode の構築</a></h1>
 <!-- toc -->
 <h2 id="21-プロジェクトのクローン"><a class="header" href="#21-プロジェクトのクローン">2.1. プロジェクトのクローン</a></h2>
-<p>githubページ：https://github.com/miracleave-ltd/mirameetVol33</p>
-<p><code>mirameetVol33-main.zip</code>を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像はWindowsの場合
+<p>github ページ：https://github.com/miracleave-ltd/mirameetVol33</p>
+<p><code>mirameetVol33-main.zip</code>を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像は Windows の場合
 <img src="./img/chapter_2_1.png" alt="キャプチャ" /></p>
 <p><img src="./img/chapter_2_2.png" alt="キャプチャ2" /></p>
-<h2 id="22-mirameetvol33-mainフォルダに移動--vscodeで起動"><a class="header" href="#22-mirameetvol33-mainフォルダに移動--vscodeで起動">2.2. mirameetVol33-mainフォルダに移動 ～ VScodeで起動</a></h2>
+<h2 id="22-mirameetvol33-main-フォルダに移動--vscode-で起動"><a class="header" href="#22-mirameetvol33-main-フォルダに移動--vscode-で起動">2.2. mirameetVol33-main フォルダに移動 ～ VScode で起動</a></h2>
 <pre><code># Windows
 cd C:\Users\mirameetVol33-main
 # Mac
@@ -172,8 +172,8 @@ cd ~/mirameetVol33-main
 # Windows・Mac共通
 code .
 </code></pre>
-<h2 id="23-コンテナ内のフォルダをvscodeで開く"><a class="header" href="#23-コンテナ内のフォルダをvscodeで開く">2.3. コンテナ内のフォルダをVSCodeで開く</a></h2>
-<p>Dev Container拡張機能を利用し、コンテナ内のVScodeに接続します。</p>
+<h2 id="23-コンテナ内のフォルダを-vscode-で開く"><a class="header" href="#23-コンテナ内のフォルダを-vscode-で開く">2.3. コンテナ内のフォルダを VSCode で開く</a></h2>
+<p>Dev Container 拡張機能を利用し、コンテナ内の VScode に接続します。</p>
 <p>・コンテナで再度開くを選択</p>
 <p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
 <p>・ウインドウが表示されない場合は左下からコンテナで再度開く</p>
@@ -183,29 +183,34 @@ code .
 <p><img src="./img/atacche-remote.jpg" alt="atacche-remote.jpg" /></p>
 <h2 id="補足開発コンテナーについて"><a class="header" href="#補足開発コンテナーについて">補足：開発コンテナーについて</a></h2>
 <p><img src="./img/devcontainer-image.jpg" alt="devcontainer image" /></p>
-<p>別のVSCodeが立ち上がるが、devcontainer.json の設定によりプラグインの入れなおしは不要</p>
+<p>2.2 で開いたものとは別の VSCode が立ち上がるが、devcontainer.json の設定によりプラグインのインストールし直しは不要</p>
 <p><img src="./img/plugins.jpg" alt="plugins" /></p>
-<h2 id="24-railsプロジェクトを起動"><a class="header" href="#24-railsプロジェクトを起動">2.4. Railsプロジェクトを起動</a></h2>
-<p>実行設定の Debug v33 web から Rails を起動する
+<h2 id="24-rails-プロジェクトを起動"><a class="header" href="#24-rails-プロジェクトを起動">2.4. Rails プロジェクトを起動</a></h2>
+<p>ターミナルにて、以下コマンドを実行しデータベースの作成を行う</p>
+<pre><code class="language-ruby">rails db:create
+</code></pre>
+<p>その後、実行設定の Debug v33 web から Rails を起動する
 <img src="./img/chapter_2_3.png" alt="キャプチャ3" /></p>
-<p><code>http://localhost:3000/</code></p>
-<p>画面が表示されれば環境構築は完了となります</p>
+<p>以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります
+<code>http://localhost:3000/</code>
+<img src="./img/chapter_2_4.png" alt="キャプチャ4" /></p>
 <h2 id="補足各ファイルの解説"><a class="header" href="#補足各ファイルの解説">補足：各ファイルの解説</a></h2>
 <p><strong>Dockerfile</strong></p>
 <p>元になるイメージと変更する手順を記述する。
 今回は ruby のバージョン 3.2.2 を指定しています。
-また、Docker イメージのビルドはキャッシュが利用できるので <code>Gemfile</code> を先に追加して <code>bundle install</code> をすることにより、時間のかかるインストール処理をキャッシュすることができます。</p>
+また、Docker イメージのビルドはキャッシュが利用できるので <code>Gemfile</code> を先に追加して <code>bundle install</code> をすることにより
+時間のかかるインストール処理をキャッシュすることができます。</p>
 <p><strong>docker-compose.yml</strong></p>
 <p>複数のコンテナをまとめて管理するための定義です。
-今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, メールサーバーを起動する <code>v33_mail</code> の3つのコンテナを定義しています。</p>
+今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, メールサーバーを起動する <code>v33_mail</code> の 3 つのコンテナを定義しています。</p>
 <p><strong>.devcontainer/devcontainer.json</strong></p>
 <p>コンテナ内の VSCode についての定義です。
 VSCode を起動するコンテナの指定やインストールするプラグインを定義できます。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="3-外部連携のモック化"><a class="header" href="#3-外部連携のモック化">3. 外部連携のモック化</a></h1>
 <!-- toc -->
 <p><code>mailhog</code> という開発用メールサーバーを利用して簡単なメール送信機能を作成して
-動作の確認が出来るかを確認しましょう！</p>
-<p>mailhogはdocker-compose.ymlの以下部分に定義されていてDevContainer起動時点で
+動作の確認が出来るかを確認しましょう</p>
+<p>mailhog は docker-compose.yml の以下部分に定義されていて DevContainer 起動時点で
 既に環境が作成されており使用できる状態です。</p>
 <pre><code>  v33_mail:
     container_name: v33_mail
@@ -214,17 +219,18 @@ VSCode を起動するコンテナの指定やインストールするプラグ�
       - &quot;8025:8025&quot;
 </code></pre>
 <h3 id="ユーザー画面管理画面作成"><a class="header" href="#ユーザー画面管理画面作成">ユーザー画面管理画面作成</a></h3>
-<p>Railsのscaffold機能を使用して、簡単なユーザー画面を作成します。
-以下コマンドを実施します。</p>
+<p>Rails の scaffold 機能を使用して、簡単なユーザー画面を作成します。</p>
+<p>はじめに以下コマンドを実施します。</p>
 <pre><code class="language-Ruby">rails g scaffold User name:string email:string
 </code></pre>
-<p>その後マイグレーションしましょう。</p>
+<p>その後マイグレーションをしましょう。</p>
 <pre><code class="language-Ruby">rails db:migrate
 </code></pre>
 <h3 id="メール送信機能追加"><a class="header" href="#メール送信機能追加">メール送信機能追加</a></h3>
+<p>Rails 組み込みの ActionMailer を使いメール機能の実装をします。</p>
 <pre><code>rails generate mailer User
 </code></pre>
-<p>作成されたuser_mailer.rbを以下の通り修正します。</p>
+<p>作成された user_mailer.rb を以下の通り修正します。</p>
 <p>・user_mailer.rb</p>
 <pre><code>class UserMailer &lt; ApplicationMailer
   default from: 'noreply@meetup.com'
@@ -239,7 +245,7 @@ VSCode を起動するコンテナの指定やインストールするプラグ�
   end
 end
 </code></pre>
-<p>メール本文を作成</p>
+<p>メールの本文に設定する内容を記載します。</p>
 <pre><code>touch app/views/user_mailer/welcome_email.text.erb
 </code></pre>
 <p>作成されたメール本文定義ファイルに以下の通り記載しましょう。</p>
@@ -251,7 +257,7 @@ end
 
 </code></pre>
 <p>app/controllers/users_controller.rb
-を以下の追記と記載された部分のみ追記。</p>
+を以下の差分の追加行のみ追記します。</p>
 <pre><code class="language-diff"># POST /users or /users.json
 def create
   @user = User.new(user_params)
@@ -269,25 +275,27 @@ def create
 end
 </code></pre>
 <p>config/enviroments/development.rb
-に以下２行のメール送信用設定値を追加</p>
+に以下２行のメール送信用設定値を追加し準備完了です。</p>
 <pre><code>config.action_mailer.delivery_method = :smtp
 config.action_mailer.smtp_settings = { address: 'mailhog', port: 1025 }
 </code></pre>
-<p>以下アドレスからユーザー画面を確認してみましょう。
-http://localhost:3000/users/</p>
-<p>メール送信して mailhog から内容が確認出来るか確認しましょう！
-http://localhost:8025/</p>
+<p>以下アドレスからユーザー画面を確認してみましょう。</p>
+<p>http://localhost:3000/users/</p>
+<p>任意のユーザーを登録した後にメールが送信されます。</p>
+<p>mailhog から内容を確認してみましょう！</p>
+<p>http://localhost:8025/</p>
 <h3 id="補足その他開発用のメールサーバーについて"><a class="header" href="#補足その他開発用のメールサーバーについて">補足：その他開発用のメールサーバーについて</a></h3>
-<p>Railsの場合はletter_openerというGemが存在するのでそちらを使用しても同等の操作をすることが可能です。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="4-dbのバージョンアップ"><a class="header" href="#4-dbのバージョンアップ">4. DBのバージョンアップ</a></h1>
+<p>Rails の場合は letter_opener という Gem が存在しますので、こちらもメール開発を行う際の選択肢の一つに挙げられます。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="4-db-のバージョンアップ"><a class="header" href="#4-db-のバージョンアップ">4. DB のバージョンアップ</a></h1>
 <!-- toc -->
-<h2 id="41-別バージョンのdbを起動"><a class="header" href="#41-別バージョンのdbを起動">4.1 別バージョンのDBを起動</a></h2>
-<p>Dockerで環境構築するメリットとして、ミドルウェアのバージョンアップ等も容易に実施することが出来ることが挙げられます。
-現在PostgreSQL13で起動しているので、こちらを15にアップデートしてみましょう。</p>
-<p>ローカル環境に直接PostgreSQLがインストールされている場合は、単純にpg_upgradeすれば良い場面もあるかもしれませんが、
-例えば、案件A：ver13、案件B：ver13の状態で案件Aだけ15に上げたいという状況だといかがでしょう？</p>
+<h2 id="41-別バージョンの-db-を起動"><a class="header" href="#41-別バージョンの-db-を起動">4.1 別バージョンの DB を起動</a></h2>
+<p>Docker で環境構築するメリットとして、ミドルウェアのバージョンアップを容易に実施することが出来ることが挙げられます。</p>
+<p>ローカル環境に直接 PostgreSQL がインストールされている場合は、単純に pg_upgrade すれば良い場面もあるかもしれませんが、
+例えば、案件 A：ver13、案件 B：ver13 の状態で案件 A だけ 15 にアップデートしたい！ という状況だといかがでしょう？</p>
+<p>PC を複数台用意する訳にも行かず困ってしまいますよね？</p>
+<p>現在 PostgreSQL13 で当システムは起動しているので、15 にアップデートしてみましょう。</p>
 <h3 id="バックアップを取得"><a class="header" href="#バックアップを取得">バックアップを取得</a></h3>
-<p>バージョン13のコンテナからバックアップを取得します。
+<p>バージョン 13 のコンテナからバックアップを取得します。
 以下をコマンドプロンプトより実行します。</p>
 <pre><code class="language-bash">docker-compose exec db pg_dumpall --clean --username postgres &gt; backup.sql
 </code></pre>
@@ -314,15 +322,15 @@ docker volume remove v33-volume
       - POSTGRES_USER=v33
       - POSTGRES_PASSWORD=meetupv33
 </code></pre>
-<p>その後、一度dev containerの接続を閉じて、再度ReOpen Containerする。</p>
+<p>その後、一度 dev container の接続を閉じて、再度 ReOpen Container する。</p>
 <h3 id="リストア"><a class="header" href="#リストア">リストア</a></h3>
 <pre><code class="language-bash">cat backup.sql | docker-compose exec -T v33_db psql --username v33
 </code></pre>
-<p>ユーザーの登録が出来るか動作確認をして問題無ければDBのバージョンアップは完了となります。</p>
+<p>ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。</p>
 <h3 id="補足ボリュームとコンテナの単純再作成"><a class="header" href="#補足ボリュームとコンテナの単純再作成">補足：ボリュームとコンテナの単純再作成</a></h3>
 <p>ローカル環境においては、既に登録済みのデータを諦めることが出来るのであれば
 途中のバックアップやリストアの手順をスキップして単純にコンテナの再作成をすることでアップデートをすることも可能です。
-テストデータがseedで用意されているのであれば、よほど特殊なデータで無い限りは単純再作成でも良いかもしれません。</p>
+テストデータが seed で用意されているのであれば、よほど特殊なデータで無い限りは単純再作成でも良いかもしれません。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ローカル環境のcleanup"><a class="header" href="#ローカル環境のcleanup">ローカル環境のCleanUp</a></h1>
 <!-- toc -->
 <p>最後に構築したDocker環境の削除を行います。</p>
