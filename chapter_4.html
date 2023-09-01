@@ -152,16 +152,17 @@
 例えば、案件 A：ver13、案件 B：ver13 の状態で案件 A だけ 15 にアップデートしたい！ という状況だといかがでしょう？</p>
 <p>PC を複数台用意する訳にも行かず困ってしまいますよね？</p>
 <p>現在 PostgreSQL13 で当システムは起動しているので、15 にアップデートしてみましょう。</p>
-<h3 id="バックアップを取得"><a class="header" href="#バックアップを取得">バックアップを取得</a></h3>
-<p>バージョン 13 のコンテナからバックアップを取得します。
-以下をコマンドプロンプトより実行します。</p>
-<pre><code class="language-bash">docker-compose exec v33_db pg_dump --clean --username v33 meetupv33_development &gt; backup.sql
+<h3 id="seedを取得"><a class="header" href="#seedを取得">seedを取得</a></h3>
+<p>バージョン 13 のコンテナからデータを取得します。
+以下をVSCodeターミナルより実行します。</p>
+<pre><code class="language-ruby">bundle exec rails db:seed:dump MODELS=users
 </code></pre>
-<p>その後データベースコンテナの削除を行います。</p>
-<pre><code class="language-bash">docker container rm [コンテナID]
+<p>その後データベースコンテナの削除を行います。
+こちらはコマンドプロンプト等、VSCode以外のDevContainerの外から実施します。</p>
+<pre><code class="language-bash">docker container rm -f [コンテナID]
 </code></pre>
 <p>ボリュームも同様に削除します。</p>
-<pre><code class="language-bash">docker volume rm mirameetvol33-main_v33-volume
+<pre><code class="language-bash">docker volume rm -f mirameetvol33-main_v33-volume
 </code></pre>
 <h3 id="バージョンをアップデート"><a class="header" href="#バージョンをアップデート">バージョンをアップデート</a></h3>
 <p>・docker-compose.yml</p>
@@ -170,7 +171,7 @@
 -    image: postgres:13
 +    image: postgres:15
     ports:
-      - &quot;5432:5432&quot;
+      - &quot;5433:5432&quot;
     volumes:
       - v33-volume:/var/lib/postgresql/data
     environment:
@@ -181,17 +182,19 @@
 <p>Dev Container の接続を一度閉じて、再度接続する。
 <img src="./img/chapter4_1.png" alt="Alt text" /></p>
 <p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
-<h3 id="リストア"><a class="header" href="#リストア">リストア</a></h3>
-<p>VSCodeで一度DBを作成</p>
+<h3 id="マイグレーション"><a class="header" href="#マイグレーション">マイグレーション</a></h3>
+<p>VSCodeで一度DBを作成し、マイグレーションを実施</p>
 <pre><code class="language-ruby">rails db:create
+rails db:migrate
 </code></pre>
-<pre><code class="language-bash">type backup.sql | docker-compose exec -T v33_db psql --username v33 -d meetupv33_development
+<p>バックアップしておいたseedデータを投入</p>
+<pre><code class="language-bash">rails db:seed
 </code></pre>
 <p>ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。</p>
-<h3 id="補足ボリュームとコンテナの単純再作成"><a class="header" href="#補足ボリュームとコンテナの単純再作成">補足：ボリュームとコンテナの単純再作成</a></h3>
-<p>ローカル環境においては、既に登録済みのデータを諦めることが出来るのであれば
-途中のバックアップやリストアの手順をスキップして単純にコンテナの再作成をすることでアップデートをすることも可能です。
-テストデータが seed で用意されているのであれば、よほど特殊なデータで無い限りは単純再作成でも良いかもしれません。</p>
+<h3 id="補足本番稼働中システムに対するdbバージョンアップについて"><a class="header" href="#補足本番稼働中システムに対するdbバージョンアップについて">補足：本番稼働中システムに対するDBバージョンアップについて</a></h3>
+<p>当手順はあくまでローカル開発環境向けの手順となります。</p>
+<p>本番稼働中のシステムにおいてはデータを損なわないように
+入念な計画の元、専用の移行ツール開発等が必須となりますのでご注意ください。</p>
 
                     </main>
 
