@@ -60,8 +60,14 @@ Dev Container の接続を一度閉じて、再度接続する。
 
 ### リストア
 
+VSCodeで一度DBを作成
+```ruby
+rails db:create
+```
+
+
 ```bash
-docker-compose exec -T v33_db psql --username v33 -d meetupv33_development -f backup.sql
+type backup.sql | docker-compose exec -T v33_db psql --username v33 -d meetupv33_development
 ```
 
 ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。
