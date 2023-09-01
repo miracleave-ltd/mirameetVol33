@@ -325,7 +325,10 @@ config.action_mailer.smtp_settings = { address: 'v33_mail', port: 1025 }
 <img src="./img/chapter4_1.png" alt="Alt text" /></p>
 <p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
 <h3 id="リストア"><a class="header" href="#リストア">リストア</a></h3>
-<pre><code class="language-bash">docker-compose exec -T v33_db psql --username v33 -d meetupv33_development -f backup.sql
+<p>VSCodeで一度DBを作成</p>
+<pre><code class="language-ruby">rails db:create
+</code></pre>
+<pre><code class="language-bash">type backup.sql | docker-compose exec -T v33_db psql --username v33 -d meetupv33_development
 </code></pre>
 <p>ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。</p>
 <h3 id="補足ボリュームとコンテナの単純再作成"><a class="header" href="#補足ボリュームとコンテナの単純再作成">補足：ボリュームとコンテナの単純再作成</a></h3>
