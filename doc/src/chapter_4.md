@@ -19,26 +19,24 @@ PC を複数台用意する訳にも行かず困ってしまいますよね？
 以下をコマンドプロンプトより実行します。
 
 ```bash
-docker-compose exec db pg_dumpall --clean --username postgres > backup.sql
+docker-compose exec v33_db pg_dump --clean --username v33 meetupv33_development > backup.sql
 ```
 
 その後データベースコンテナの削除を行います。
 
 ```bash
-docker container ls -a
 docker container rm [コンテナID]
 ```
 
 ボリュームも同様に削除します。
 
 ```bash
-docker volume ls
-docker volume remove v33-volume
+docker volume rm mirameetvol33-main_v33-volume
 ```
 
 ### バージョンをアップデート
 
-※並行して稼働させるなら順番等考える必要あり。
+・docker-compose.yml
 
 ```diff
   v33_db:
@@ -55,12 +53,15 @@ docker volume remove v33-volume
       - POSTGRES_PASSWORD=meetupv33
 ```
 
-その後、一度 dev container の接続を閉じて、再度 ReOpen Container する。
+Dev Container の接続を一度閉じて、再度接続する。
+![Alt text](./img/chapter4_1.png)
+
+![reopen container](./img/reopen-container.jpg)
 
 ### リストア
 
 ```bash
-cat backup.sql | docker-compose exec -T v33_db psql --username v33
+docker-compose exec -T v33_db psql --username v33 -d meetupv33_development -f backup.sql
 ```
 
 ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。

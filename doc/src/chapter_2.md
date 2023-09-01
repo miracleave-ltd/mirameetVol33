@@ -60,7 +60,7 @@ rails db:create
 ![キャプチャ3](./img/chapter_2_3.png)
 
 以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります
-`http://localhost:3000/`
+`http://localhost:3001/`
 ![キャプチャ4](./img/chapter_2_4.png)
 
 ## 補足：各ファイルの解説
@@ -75,7 +75,10 @@ rails db:create
 **docker-compose.yml**
 
 複数のコンテナをまとめて管理するための定義です。
+
 今回は DB のコンテナである `v33_db`, Rails を起動する `v33_web`, メールサーバーを起動する `v33_mail` の 3 つのコンテナを定義しています。
+
+また、DB のデータ永続化する為に、`v33-volume` というボリュームも定義しています。
 
 **.devcontainer/devcontainer.json**
 

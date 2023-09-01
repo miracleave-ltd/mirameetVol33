@@ -8,7 +8,7 @@ services:
     container_name: v33_db
     image: postgres:13
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - v33-volume:/var/lib/postgresql/data
     environment:
@@ -29,7 +29,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - 3000:3000
+      - 3001:3000
     depends_on:
       - v33_db
 

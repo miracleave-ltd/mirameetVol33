@@ -102,7 +102,7 @@ config/enviroments/development.rb
 
 ```
 config.action_mailer.delivery_method = :smtp
-config.action_mailer.smtp_settings = { address: 'mailhog', port: 1025 }
+config.action_mailer.smtp_settings = { address: 'v33_mail', port: 1025 }
 ```
 
 以下アドレスからユーザー画面を確認してみましょう。
