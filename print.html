@@ -192,7 +192,7 @@ code .
 <p>その後、実行設定の Debug v33 web から Rails を起動する
 <img src="./img/chapter_2_3.png" alt="キャプチャ3" /></p>
 <p>以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります
-<code>http://localhost:3000/</code>
+<code>http://localhost:3001/</code>
 <img src="./img/chapter_2_4.png" alt="キャプチャ4" /></p>
 <h2 id="補足各ファイルの解説"><a class="header" href="#補足各ファイルの解説">補足：各ファイルの解説</a></h2>
 <p><strong>Dockerfile</strong></p>
@@ -201,8 +201,9 @@ code .
 また、Docker イメージのビルドはキャッシュが利用できるので <code>Gemfile</code> を先に追加して <code>bundle install</code> をすることにより
 時間のかかるインストール処理をキャッシュすることができます。</p>
 <p><strong>docker-compose.yml</strong></p>
-<p>複数のコンテナをまとめて管理するための定義です。
-今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, メールサーバーを起動する <code>v33_mail</code> の 3 つのコンテナを定義しています。</p>
+<p>複数のコンテナをまとめて管理するための定義です。</p>
+<p>今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, メールサーバーを起動する <code>v33_mail</code> の 3 つのコンテナを定義しています。</p>
+<p>また、DB のデータ永続化する為に、<code>v33-volume</code> というボリュームも定義しています。</p>
 <p><strong>.devcontainer/devcontainer.json</strong></p>
 <p>コンテナ内の VSCode についての定義です。
 VSCode を起動するコンテナの指定やインストールするプラグインを定義できます。</p>
@@ -277,7 +278,7 @@ end
 <p>config/enviroments/development.rb
 に以下２行のメール送信用設定値を追加し準備完了です。</p>
 <pre><code>config.action_mailer.delivery_method = :smtp
-config.action_mailer.smtp_settings = { address: 'mailhog', port: 1025 }
+config.action_mailer.smtp_settings = { address: 'v33_mail', port: 1025 }
 </code></pre>
 <p>以下アドレスからユーザー画面を確認してみましょう。</p>
 <p>http://localhost:3000/users/</p>
@@ -297,18 +298,16 @@ config.action_mailer.smtp_settings = { address: 'mailhog', port: 1025 }
 <h3 id="バックアップを取得"><a class="header" href="#バックアップを取得">バックアップを取得</a></h3>
 <p>バージョン 13 のコンテナからバックアップを取得します。
 以下をコマンドプロンプトより実行します。</p>
-<pre><code class="language-bash">docker-compose exec db pg_dumpall --clean --username postgres &gt; backup.sql
+<pre><code class="language-bash">docker-compose exec v33_db pg_dump --clean --username v33 meetupv33_development &gt; backup.sql
 </code></pre>
 <p>その後データベースコンテナの削除を行います。</p>
-<pre><code class="language-bash">docker container ls -a
-docker container rm [コンテナID]
+<pre><code class="language-bash">docker container rm [コンテナID]
 </code></pre>
 <p>ボリュームも同様に削除します。</p>
-<pre><code class="language-bash">docker volume ls
-docker volume remove v33-volume
+<pre><code class="language-bash">docker volume rm mirameetvol33-main_v33-volume
 </code></pre>
 <h3 id="バージョンをアップデート"><a class="header" href="#バージョンをアップデート">バージョンをアップデート</a></h3>
-<p>※並行して稼働させるなら順番等考える必要あり。</p>
+<p>・docker-compose.yml</p>
 <pre><code class="language-diff">  v33_db:
     container_name: v33_db
 -    image: postgres:13
@@ -322,18 +321,21 @@ docker volume remove v33-volume
       - POSTGRES_USER=v33
       - POSTGRES_PASSWORD=meetupv33
 </code></pre>
-<p>その後、一度 dev container の接続を閉じて、再度 ReOpen Container する。</p>
+<p>Dev Container の接続を一度閉じて、再度接続する。
+<img src="./img/chapter4_1.png" alt="Alt text" /></p>
+<p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
 <h3 id="リストア"><a class="header" href="#リストア">リストア</a></h3>
-<pre><code class="language-bash">cat backup.sql | docker-compose exec -T v33_db psql --username v33
+<pre><code class="language-bash">docker-compose exec -T v33_db psql --username v33 -d meetupv33_development -f backup.sql
 </code></pre>
 <p>ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。</p>
 <h3 id="補足ボリュームとコンテナの単純再作成"><a class="header" href="#補足ボリュームとコンテナの単純再作成">補足：ボリュームとコンテナの単純再作成</a></h3>
 <p>ローカル環境においては、既に登録済みのデータを諦めることが出来るのであれば
 途中のバックアップやリストアの手順をスキップして単純にコンテナの再作成をすることでアップデートをすることも可能です。
 テストデータが seed で用意されているのであれば、よほど特殊なデータで無い限りは単純再作成でも良いかもしれません。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ローカル環境のcleanup"><a class="header" href="#ローカル環境のcleanup">ローカル環境のCleanUp</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ローカル環境の-cleanup"><a class="header" href="#ローカル環境の-cleanup">ローカル環境の CleanUp</a></h1>
 <!-- toc -->
-<p>最後に構築したDocker環境の削除を行います。</p>
+<p>最後に構築した Docker 環境の削除を行います。
+Dev Container の VSCode ターミナル上ではなく、コマンドプロンプトで実施するようお願いします。</p>
 <h2 id="コンテナの停止"><a class="header" href="#コンテナの停止">コンテナの停止</a></h2>
 <p>次のコマンドを実行し、コンテナの状態を確認します。</p>
 <pre><code class="language-sh">docker container ls -a
@@ -362,9 +364,21 @@ docker volume remove v33-volume
 <blockquote>
 <p>Untagged: mirameetvol33_v33_web...</p>
 </blockquote>
+<h2 id="ボリュームの削除"><a class="header" href="#ボリュームの削除">ボリュームの削除</a></h2>
+<p>次のコマンドを実行し、作成したボリュームを確認します。</p>
+<pre><code class="language-sh">docker volume ls
+
+# REPOSITORY              TAG             IMAGE ID       CREATED         SIZE
+# mirameetvol33_v33_web   latest          40dc866fa6c0   4 days ago      1.08GB
+# postgres                13              efc790b27960   13 days ago     407MB
+# mailhog/mailhog         latest          4de68494cd0d   3 years ago     392MB
+</code></pre>
+<p>上記で確認できた<code>volume NAME</code>を利用して、ボリュームを削除します。</p>
+<pre><code class="language-sh">docker volume rm -f [volume NAME]
+</code></pre>
 <h2 id="フォルダの削除"><a class="header" href="#フォルダの削除">フォルダの削除</a></h2>
 <p>最後にフォルダを削除します。</p>
-<h3 id="macの場合"><a class="header" href="#macの場合">Macの場合</a></h3>
+<h3 id="mac-の場合"><a class="header" href="#mac-の場合">Mac の場合</a></h3>
 <pre><code class="language-sh"># 一つ上の階層に移動
 cd ../
 # mirameetVol33-mainフォルダが存在しているかを確認
@@ -372,7 +386,7 @@ ls
 # mirameetVol33-mainフォルダが存在している場合、下記コマンドを実行しフォルダを削除
 rm -rf mirameetVol33-main
 </code></pre>
-<h3 id="windowsの場合"><a class="header" href="#windowsの場合">Windowsの場合</a></h3>
+<h3 id="windows-の場合"><a class="header" href="#windows-の場合">Windows の場合</a></h3>
 <pre><code class="language-sh"># 一つ上の階層に移動
 cd ../
 # mirameetVol33-mainフォルダが存在しているかを確認

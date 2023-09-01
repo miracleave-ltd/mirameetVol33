@@ -180,7 +180,7 @@ code .
 <p>その後、実行設定の Debug v33 web から Rails を起動する
 <img src="./img/chapter_2_3.png" alt="キャプチャ3" /></p>
 <p>以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります
-<code>http://localhost:3000/</code>
+<code>http://localhost:3001/</code>
 <img src="./img/chapter_2_4.png" alt="キャプチャ4" /></p>
 <h2 id="補足各ファイルの解説"><a class="header" href="#補足各ファイルの解説">補足：各ファイルの解説</a></h2>
 <p><strong>Dockerfile</strong></p>
@@ -189,8 +189,9 @@ code .
 また、Docker イメージのビルドはキャッシュが利用できるので <code>Gemfile</code> を先に追加して <code>bundle install</code> をすることにより
 時間のかかるインストール処理をキャッシュすることができます。</p>
 <p><strong>docker-compose.yml</strong></p>
-<p>複数のコンテナをまとめて管理するための定義です。
-今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, メールサーバーを起動する <code>v33_mail</code> の 3 つのコンテナを定義しています。</p>
+<p>複数のコンテナをまとめて管理するための定義です。</p>
+<p>今回は DB のコンテナである <code>v33_db</code>, Rails を起動する <code>v33_web</code>, メールサーバーを起動する <code>v33_mail</code> の 3 つのコンテナを定義しています。</p>
+<p>また、DB のデータ永続化する為に、<code>v33-volume</code> というボリュームも定義しています。</p>
 <p><strong>.devcontainer/devcontainer.json</strong></p>
 <p>コンテナ内の VSCode についての定義です。
 VSCode を起動するコンテナの指定やインストールするプラグインを定義できます。</p>

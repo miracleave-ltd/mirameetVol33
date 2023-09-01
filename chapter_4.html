@@ -155,18 +155,16 @@
 <h3 id="バックアップを取得"><a class="header" href="#バックアップを取得">バックアップを取得</a></h3>
 <p>バージョン 13 のコンテナからバックアップを取得します。
 以下をコマンドプロンプトより実行します。</p>
-<pre><code class="language-bash">docker-compose exec db pg_dumpall --clean --username postgres &gt; backup.sql
+<pre><code class="language-bash">docker-compose exec v33_db pg_dump --clean --username v33 meetupv33_development &gt; backup.sql
 </code></pre>
 <p>その後データベースコンテナの削除を行います。</p>
-<pre><code class="language-bash">docker container ls -a
-docker container rm [コンテナID]
+<pre><code class="language-bash">docker container rm [コンテナID]
 </code></pre>
 <p>ボリュームも同様に削除します。</p>
-<pre><code class="language-bash">docker volume ls
-docker volume remove v33-volume
+<pre><code class="language-bash">docker volume rm mirameetvol33-main_v33-volume
 </code></pre>
 <h3 id="バージョンをアップデート"><a class="header" href="#バージョンをアップデート">バージョンをアップデート</a></h3>
-<p>※並行して稼働させるなら順番等考える必要あり。</p>
+<p>・docker-compose.yml</p>
 <pre><code class="language-diff">  v33_db:
     container_name: v33_db
 -    image: postgres:13
@@ -180,9 +178,11 @@ docker volume remove v33-volume
       - POSTGRES_USER=v33
       - POSTGRES_PASSWORD=meetupv33
 </code></pre>
-<p>その後、一度 dev container の接続を閉じて、再度 ReOpen Container する。</p>
+<p>Dev Container の接続を一度閉じて、再度接続する。
+<img src="./img/chapter4_1.png" alt="Alt text" /></p>
+<p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
 <h3 id="リストア"><a class="header" href="#リストア">リストア</a></h3>
-<pre><code class="language-bash">cat backup.sql | docker-compose exec -T v33_db psql --username v33
+<pre><code class="language-bash">docker-compose exec -T v33_db psql --username v33 -d meetupv33_development -f backup.sql
 </code></pre>
 <p>ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。</p>
 <h3 id="補足ボリュームとコンテナの単純再作成"><a class="header" href="#補足ボリュームとコンテナの単純再作成">補足：ボリュームとコンテナの単純再作成</a></h3>
