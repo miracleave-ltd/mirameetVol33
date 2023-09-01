@@ -107,7 +107,7 @@ config.action_mailer.smtp_settings = { address: 'v33_mail', port: 1025 }
 
 以下アドレスからユーザー画面を確認してみましょう。
 
-http://localhost:3000/users/
+http://localhost:3001/users/
 
 任意のユーザーを登録した後にメールが送信されます。
 

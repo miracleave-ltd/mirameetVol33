@@ -13,25 +13,26 @@ PC を複数台用意する訳にも行かず困ってしまいますよね？
 
 現在 PostgreSQL13 で当システムは起動しているので、15 にアップデートしてみましょう。
 
-### バックアップを取得
+### seedを取得
 
-バージョン 13 のコンテナからバックアップを取得します。
-以下をコマンドプロンプトより実行します。
+バージョン 13 のコンテナからデータを取得します。
+以下をVSCodeターミナルより実行します。
 
-```bash
-docker-compose exec v33_db pg_dump --clean --username v33 meetupv33_development > backup.sql
+```ruby
+bundle exec rails db:seed:dump MODELS=users
 ```
 
 その後データベースコンテナの削除を行います。
+こちらはコマンドプロンプト等、VSCode以外のDevContainerの外から実施します。
 
 ```bash
-docker container rm [コンテナID]
+docker container rm -f [コンテナID]
 ```
 
 ボリュームも同様に削除します。
 
 ```bash
-docker volume rm mirameetvol33-main_v33-volume
+docker volume rm -f mirameetvol33-main_v33-volume
 ```
 
 ### バージョンをアップデート
@@ -44,7 +45,7 @@ docker volume rm mirameetvol33-main_v33-volume
 -    image: postgres:13
 +    image: postgres:15
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - v33-volume:/var/lib/postgresql/data
     environment:
@@ -58,22 +59,25 @@ Dev Container の接続を一度閉じて、再度接続する。
 
 ![reopen container](./img/reopen-container.jpg)
 
-### リストア
+### マイグレーション
 
-VSCodeで一度DBを作成
+VSCodeで一度DBを作成し、マイグレーションを実施
 ```ruby
 rails db:create
+rails db:migrate
 ```
 
-
+バックアップしておいたseedデータを投入
 ```bash
-type backup.sql | docker-compose exec -T v33_db psql --username v33 -d meetupv33_development
+rails db:seed
 ```
 
 ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。
 
-### 補足：ボリュームとコンテナの単純再作成
+### 補足：本番稼働中システムに対するDBバージョンアップについて
 
-ローカル環境においては、既に登録済みのデータを諦めることが出来るのであれば
-途中のバックアップやリストアの手順をスキップして単純にコンテナの再作成をすることでアップデートをすることも可能です。
-テストデータが seed で用意されているのであれば、よほど特殊なデータで無い限りは単純再作成でも良いかもしれません。
+当手順はあくまでローカル開発環境向けの手順となります。
+
+本番稼働中のシステムにおいてはデータを損なわないように
+入念な計画の元、専用の移行ツール開発等が必須となりますのでご注意ください。
+
