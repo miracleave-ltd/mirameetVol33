@@ -50,8 +50,8 @@ docker volume rm -f mirameetvol33-main_v33-volume
 ```diff
   v33_db:
     container_name: v33_db
--    image: postgres:13
-+    image: postgres:15
+-    image: postgres:13-alpine
++    image: postgres:15-alpine
     ports:
       - "5433:5432"
     volumes:

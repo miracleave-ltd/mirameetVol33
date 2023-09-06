@@ -111,6 +111,10 @@ config.action_mailer.delivery_method = :smtp
 config.action_mailer.smtp_settings = { address: 'v33_mail', port: 1025 }
 ```
 
+環境定義ファイルの内容を反映する為に一度サーバー再起動を行います。以下の更新ボタンを押下しましょう。
+
+![Alt text](./img/chapter_3_3.png)
+
 以下アドレスからユーザー画面を確認してみましょう。任意のユーザーを登録した後にメールが送信されます。
 
 http://localhost:3001/users/
