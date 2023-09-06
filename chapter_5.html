@@ -148,29 +148,33 @@
 <!-- toc -->
 <p>最後に構築した Docker 環境の削除を行います。
 Dev Container の VSCode ターミナル上ではなく、コマンドプロンプトで実施するようお願いします。</p>
-<h2 id="コンテナの停止"><a class="header" href="#コンテナの停止">コンテナの停止</a></h2>
+<h2 id="コンテナの削除"><a class="header" href="#コンテナの削除">コンテナの削除</a></h2>
 <p>次のコマンドを実行し、コンテナの状態を確認します。</p>
+<p>以下コメント部分に記載しているようなコンテナが対象となります。※若干名称が異なる可能性あります</p>
 <pre><code class="language-sh">docker container ls -a
 
-# CONTAINER ID   IMAGE                           COMMAND                  CREATED        STATUS                      PORTS                                 NAMES
-# b173bb2c3e2e   mirameetvol33_v33_web           &quot;/bin/sh -c 'echo Co…&quot;   3 days ago     Up 25 minutes               0.0.0.0:3000-&gt;3000/tcp                v33_web
-# 23f502d1c58a   postgres:13                     &quot;docker-entrypoint.s…&quot;   3 days ago     Exited (137) 2 days ago                                           v33_db
-# 901edcf563d4   mailhog/mailhog                 &quot;MailHog&quot;                3 days ago     Exited (2) 2 days ago                                             v33_mail
+# CONTAINER ID   IMAGE                        COMMAND                  CREATED          STATUS                           PORTS                                 NAMES
+# 0875b41f2d63   postgres:15                  &quot;docker-entrypoint.s…&quot;   4 minutes ago    Up 4 minutes                     0.0.0.0:5434-&gt;5432/tcp                v33_db
+# 1038e3c437bd   mirameetvol33-main_v33_web   &quot;/bin/sh -c 'echo Co…&quot;   48 minutes ago   Up 4 minutes                     0.0.0.0:3001-&gt;3000/tcp                v33_web
+# 74bca59dd4e8   mailhog/mailhog              &quot;MailHog&quot;                48 minutes ago   Up 4 minutes                     1025/tcp, 0.0.0.0:8025-&gt;8025/tcp      v33_mail
 </code></pre>
-<p>上記で確認できた<code>CONTAINER ID</code>を次のコマンドで利用し、コンテナを停止します。</p>
-<pre><code class="language-sh">docker container stop [CONTAINER ID]
+<p>上記で確認できた<code>CONTAINER ID</code>を次のコマンドで利用し、コンテナを削除します。</p>
+<p>複数 ID スペース区切りで一括で指定可能です。</p>
+<pre><code class="language-sh">docker container rm -f [CONTAINER ID 1件目] [CONTAINER ID 2件目] ・・・
 </code></pre>
 <h2 id="イメージの削除"><a class="header" href="#イメージの削除">イメージの削除</a></h2>
 <p>次のコマンドを実行し、作成したコンテナイメージを確認します。</p>
 <pre><code class="language-sh">docker image ls
 
-# REPOSITORY              TAG             IMAGE ID       CREATED         SIZE
-# mirameetvol33_v33_web   latest          40dc866fa6c0   4 days ago      1.08GB
-# postgres                13              efc790b27960   13 days ago     407MB
-# mailhog/mailhog         latest          4de68494cd0d   3 years ago     392MB
+# REPOSITORY                   TAG             IMAGE ID       CREATED          SIZE
+# mirameetvol33-main_v33_web   latest          32ed84dc1bd0   59 minutes ago   1.08GB
+# postgres                     13              efc790b27960   3 weeks ago      407MB
+# postgres                     15              43677b39c446   3 weeks ago      412MB
+# mailhog/mailhog              latest          4de68494cd0d   3 years ago      392MB
 </code></pre>
 <p>上記で確認できた<code>IMAGE ID</code>を利用して、ビルドされたイメージを削除します。</p>
-<pre><code class="language-sh">docker image rm -f [IMAGE ID]
+<p>こちらも同じくスペース区切りで複数指定できます。</p>
+<pre><code class="language-sh">docker image rm -f [IMAGE ID 1件目] [IMAGE ID 2件目] ・・・
 </code></pre>
 <p>次のようなメッセージが確認できたら、イメージが正常に削除出来ています。</p>
 <blockquote>
@@ -180,10 +184,8 @@ Dev Container の VSCode ターミナル上ではなく、コマンドプロン�
 <p>次のコマンドを実行し、作成したボリュームを確認します。</p>
 <pre><code class="language-sh">docker volume ls
 
-# REPOSITORY              TAG             IMAGE ID       CREATED         SIZE
-# mirameetvol33_v33_web   latest          40dc866fa6c0   4 days ago      1.08GB
-# postgres                13              efc790b27960   13 days ago     407MB
-# mailhog/mailhog         latest          4de68494cd0d   3 years ago     392MB
+# DRIVER    VOLUME NAME
+# local     mirameetvol33-main_v33-volume
 </code></pre>
 <p>上記で確認できた<code>volume NAME</code>を利用して、ボリュームを削除します。</p>
 <pre><code class="language-sh">docker volume rm -f [volume NAME]

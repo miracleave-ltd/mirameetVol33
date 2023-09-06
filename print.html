@@ -145,25 +145,27 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="初心者向けdockerハンズオンrails環境構築を通してdockerの特徴に触れてみよう"><a class="header" href="#初心者向けdockerハンズオンrails環境構築を通してdockerの特徴に触れてみよう">初心者向けDockerハンズオン！Rails環境構築を通してDockerの特徴に触れてみよう！</a></h1>
+                        <h1 id="初心者向け-docker-ハンズオンrails-環境構築を通して-docker-の特徴に触れてみよう"><a class="header" href="#初心者向け-docker-ハンズオンrails-環境構築を通して-docker-の特徴に触れてみよう">初心者向け Docker ハンズオン！Rails 環境構築を通して Docker の特徴に触れてみよう！</a></h1>
 <!-- toc -->
 <h2 id="事前準備"><a class="header" href="#事前準備">事前準備</a></h2>
 <ul>
-<li>VSCodeインストール</li>
-<li>Dockerインストール</li>
-<li>Gitインストール、GitHubアカウントの作成</li>
+<li>VSCode インストール</li>
+<li>Docker インストール</li>
+<li>GitHub アカウントの作成</li>
 </ul>
-<h2 id="今回の流れ環境構築--メール送信機能作成データベースバージョン変更"><a class="header" href="#今回の流れ環境構築--メール送信機能作成データベースバージョン変更">今回の流れ（環境構築 ～ メール送信機能作成、データベースバージョン変更）</a></h2>
-<p>Railsのスキャフォールディング機能を用いて、ユーザー登録と同時にメール送信を行うことの出来る画面を作成。</p>
-<p>その後、データベース（PostgreSQL）のバージョン変更を実施しDockerの特徴に触れていきます。</p>
+<h2 id="今回のハンズオンの流れ"><a class="header" href="#今回のハンズオンの流れ">今回のハンズオンの流れ</a></h2>
+<p>はじめに、Rails の scaffold 機能を用いて、簡単なユーザー登録画面を作成します。</p>
+<p>ユーザー登録時にメールを送信させるのですが、その確認用のメール開発サーバーを Docker にて用意します。</p>
+<p>その後、立ち上げたデータベース（PostgreSQL）のバージョンアップを Docker の起動設定を変更することで実施してみます。</p>
+<p>開発メールサーバーの利用と、データベースのバージョンアップを通じて少しでも Docker の特徴に触れてもらえると幸いです！</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="2-docker--vscode-の構築"><a class="header" href="#2-docker--vscode-の構築">2. Docker + VSCode の構築</a></h1>
 <!-- toc -->
-<h2 id="21-プロジェクトのクローン"><a class="header" href="#21-プロジェクトのクローン">2.1. プロジェクトのクローン</a></h2>
+<h2 id="21-プロジェクトのダウンロード"><a class="header" href="#21-プロジェクトのダウンロード">2.1. プロジェクトのダウンロード</a></h2>
 <p>github ページ：https://github.com/miracleave-ltd/mirameetVol33</p>
 <p><code>mirameetVol33-main.zip</code>を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像は Windows の場合
 <img src="./img/chapter_2_1.png" alt="キャプチャ" /></p>
 <p><img src="./img/chapter_2_2.png" alt="キャプチャ2" /></p>
-<h2 id="22-mirameetvol33-main-フォルダに移動--vscode-で起動"><a class="header" href="#22-mirameetvol33-main-フォルダに移動--vscode-で起動">2.2. mirameetVol33-main フォルダに移動 ～ VScode で起動</a></h2>
+<h2 id="22-配置したフォルダを-vscode-で起動"><a class="header" href="#22-配置したフォルダを-vscode-で起動">2.2. 配置したフォルダを VScode で起動</a></h2>
 <pre><code># Windows
 cd C:\Users\mirameetVol33-main
 # Mac
@@ -177,22 +179,35 @@ code .
 <p>・コンテナで再度開くを選択</p>
 <p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
 <p>・ウインドウが表示されない場合は左下からコンテナで再度開く</p>
-<p><img src="./img/attache-environment.jpg" alt="attache-environment.jpg" />
-<img src="./img/reopen-container2.jpg" alt="reopen container2" /></p>
+<p><img src="./img/attache-environment.jpg" alt="attache-environment.jpg" /></p>
+<p><img src="./img/reopen-container2.jpg" alt="reopen container2" /></p>
 <p>・左下に開発コンテナと表示されていれば成功です</p>
 <p><img src="./img/atacche-remote.jpg" alt="atacche-remote.jpg" /></p>
 <h2 id="補足開発コンテナーについて"><a class="header" href="#補足開発コンテナーについて">補足：開発コンテナーについて</a></h2>
 <p><img src="./img/devcontainer-image.jpg" alt="devcontainer image" /></p>
-<p>2.2 で開いたものとは別の VSCode が立ち上がるが、devcontainer.json の設定によりプラグインのインストールし直しは不要</p>
+<p>2.2 で開いたものとは別の VSCode が立ち上がります。</p>
+<p>立ち上がると Explorer 上にはコンテナ内にマウントされたソースコードが表示されるようになります。</p>
+<p>よく ‘Docker コンテナの中に入る’ という表現を使うかと思います。以下のようなコマンドですね。</p>
+<blockquote>
+<p>docker container exec -it コンテナ名 bash 等</p>
+</blockquote>
+<p>コマンドからですと、CUI ベースで取っ付きにくい方も多いかと思いますが、この Dev Container ではほぼ同様のことを GUI（VSCode の見た目）ベースで操作出来るので、その点が大きなメリットとなります。</p>
+<p>VSCode のターミナルも以下のようにコンテナ内に入った時のように表示されます。</p>
+<p><img src="./img/chapter_2_6.png" alt="Alt text" /></p>
+<p>devcontainer.json の設定により、VSCode のプラグインのインストールし直しは不要となります。</p>
+<p>実際に JSON ファイルと、インストール済みの拡張機能を確認してみましょう！</p>
+<p>〇.devcontainer\devcontainer.json</p>
+<p><img src="./img/chapter_2_5.png" alt="Alt text" /></p>
+<p>〇拡張機能</p>
 <p><img src="./img/plugins.jpg" alt="plugins" /></p>
 <h2 id="24-rails-プロジェクトを起動"><a class="header" href="#24-rails-プロジェクトを起動">2.4. Rails プロジェクトを起動</a></h2>
 <p>ターミナルにて、以下コマンドを実行しデータベースの作成を行う</p>
 <pre><code class="language-ruby">rails db:create
 </code></pre>
-<p>その後、実行設定の Debug v33 web から Rails を起動する
-<img src="./img/chapter_2_3.png" alt="キャプチャ3" /></p>
-<p>以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります
-<code>http://localhost:3001/</code>
+<p>その後、実行設定の Debug v33 web から Rails を起動する</p>
+<p><img src="./img/chapter_2_3.png" alt="キャプチャ3" /></p>
+<p>以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります</p>
+<p><code>http://localhost:3001/</code>
 <img src="./img/chapter_2_4.png" alt="キャプチャ4" /></p>
 <h2 id="補足各ファイルの解説"><a class="header" href="#補足各ファイルの解説">補足：各ファイルの解説</a></h2>
 <p><strong>Dockerfile</strong></p>
@@ -209,9 +224,10 @@ code .
 VSCode を起動するコンテナの指定やインストールするプラグインを定義できます。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="3-外部連携のモック化"><a class="header" href="#3-外部連携のモック化">3. 外部連携のモック化</a></h1>
 <!-- toc -->
-<p><code>mailhog</code> という開発用メールサーバーを利用して簡単なメール送信機能を作成して
-動作の確認が出来るかを確認しましょう</p>
-<p>mailhog は docker-compose.yml の以下部分に定義されていて DevContainer 起動時点で
+<p>開発用メールサーバーを利用して簡単なメール送信機能を作成して
+動作確認してみましょう。</p>
+<p>今回は<code>mailhog</code> というメールサーバーを用意します。Docker 公式にてイメージが提供されています。</p>
+<p>mailhog は docker-compose.yml の以下部分に定義されており、DevContainer 起動時点で
 既に環境が作成されており使用できる状態です。</p>
 <pre><code>  v33_mail:
     container_name: v33_mail
@@ -224,7 +240,7 @@ VSCode を起動するコンテナの指定やインストールするプラグ�
 <p>はじめに以下コマンドを実施します。</p>
 <pre><code class="language-Ruby">rails g scaffold User name:string email:string
 </code></pre>
-<p>その後マイグレーションをしましょう。</p>
+<p>ユーザー用のモデルが作成されましたので、その内容を DB へ反映する為にマイグレーションをしましょう。</p>
 <pre><code class="language-Ruby">rails db:migrate
 </code></pre>
 <h3 id="メール送信機能追加"><a class="header" href="#メール送信機能追加">メール送信機能追加</a></h3>
@@ -232,7 +248,7 @@ VSCode を起動するコンテナの指定やインストールするプラグ�
 <pre><code>rails generate mailer User
 </code></pre>
 <p>作成された user_mailer.rb を以下の通り修正します。</p>
-<p>・user_mailer.rb</p>
+<p>〇 app\mailers\user_mailer.rb</p>
 <pre><code>class UserMailer &lt; ApplicationMailer
   default from: 'noreply@meetup.com'
 
@@ -250,6 +266,7 @@ end
 <pre><code>touch app/views/user_mailer/welcome_email.text.erb
 </code></pre>
 <p>作成されたメール本文定義ファイルに以下の通り記載しましょう。</p>
+<p>〇 app/views/user_mailer/welcome_email.text.erb</p>
 <pre><code>&lt;%= @user.name %&gt;様
 
 新規登録ありがとうございます。
@@ -257,8 +274,8 @@ end
 引き続きミートアップをお楽しみください。
 
 </code></pre>
-<p>app/controllers/users_controller.rb
-を以下の差分の追加行のみ追記します。</p>
+<p>ユーザー機能のコントローラに対して、以下差分となっている追加行を記載します。</p>
+<p>〇 app/controllers/users_controller.rb</p>
 <pre><code class="language-diff"># POST /users or /users.json
 def create
   @user = User.new(user_params)
@@ -275,18 +292,21 @@ def create
   end
 end
 </code></pre>
-<p>config/enviroments/development.rb
-に以下２行のメール送信用設定値を追加し準備完了です。</p>
+<p>最後に環境定義ファイルにメール送信先の設定を記載して準備完了です。</p>
+<p>〇 config/enviroments/development.rb</p>
 <pre><code>config.action_mailer.delivery_method = :smtp
 config.action_mailer.smtp_settings = { address: 'v33_mail', port: 1025 }
 </code></pre>
-<p>以下アドレスからユーザー画面を確認してみましょう。</p>
+<p>以下アドレスからユーザー画面を確認してみましょう。任意のユーザーを登録した後にメールが送信されます。</p>
 <p>http://localhost:3001/users/</p>
-<p>任意のユーザーを登録した後にメールが送信されます。</p>
-<p>mailhog から内容を確認してみましょう！</p>
+<p><img src="./img/chapter_3_1.png" alt="Alt text" /></p>
+<p>送信された内容を mailhog から確認してみましょう！</p>
 <p>http://localhost:8025/</p>
+<p>※疑似的なメール画面が表示されるはず</p>
+<p><img src="./img/chapter_3_2.png" alt="Alt text" /></p>
 <h3 id="補足その他開発用のメールサーバーについて"><a class="header" href="#補足その他開発用のメールサーバーについて">補足：その他開発用のメールサーバーについて</a></h3>
-<p>Rails の場合は letter_opener という Gem が存在しますので、こちらもメール開発を行う際の選択肢の一つに挙げられます。</p>
+<p>Rails の場合は <a href="https://github.com/ryanb/letter_opener">letter_opener</a> という Gem が存在します。</p>
+<p>こちらも Rails でのメール開発を行う際の選択肢の一つに挙げられます。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="4-db-のバージョンアップ"><a class="header" href="#4-db-のバージョンアップ">4. DB のバージョンアップ</a></h1>
 <!-- toc -->
 <h2 id="41-別バージョンの-db-を起動"><a class="header" href="#41-別バージョンの-db-を起動">4.1 別バージョンの DB を起動</a></h2>
@@ -295,17 +315,25 @@ config.action_mailer.smtp_settings = { address: 'v33_mail', port: 1025 }
 例えば、案件 A：ver13、案件 B：ver13 の状態で案件 A だけ 15 にアップデートしたい！ という状況だといかがでしょう？</p>
 <p>PC を複数台用意する訳にも行かず困ってしまいますよね？</p>
 <p>現在 PostgreSQL13 で当システムは起動しているので、15 にアップデートしてみましょう。</p>
-<h3 id="seedを取得"><a class="header" href="#seedを取得">seedを取得</a></h3>
+<h3 id="seed-を取得"><a class="header" href="#seed-を取得">seed を取得</a></h3>
 <p>バージョン 13 のコンテナからデータを取得します。
-以下をVSCodeターミナルより実行します。</p>
+以下を VSCode ターミナルより実行します。</p>
 <pre><code class="language-ruby">bundle exec rails db:seed:dump MODELS=users
 </code></pre>
 <p>その後データベースコンテナの削除を行います。
-こちらはコマンドプロンプト等、VSCode以外のDevContainerの外から実施します。</p>
-<pre><code class="language-bash">docker container rm -f [コンテナID]
+こちらはコマンドプロンプト等、VSCode 以外の DevContainer の外から実施します。</p>
+<pre><code class="language-bash"># 以下で立ち上がっているコンテナを確認しNameがv33_dbのIDを控えておきましょう
+docker container ls -a
+
+# 控えておいたIDに置き換えてコンテナを削除します
+docker container rm -f [コンテナID]
 </code></pre>
 <p>ボリュームも同様に削除します。</p>
-<pre><code class="language-bash">docker volume rm -f mirameetvol33-main_v33-volume
+<pre><code class="language-bash"># 同様に作成済みのボリュームを確認し、Nameを控えておきます
+docker volume ls
+
+# 控えておいたNameに置き換えます（おそらく以下のような名前になっている想定です）
+docker volume rm -f mirameetvol33-main_v33-volume
 </code></pre>
 <h3 id="バージョンをアップデート"><a class="header" href="#バージョンをアップデート">バージョンをアップデート</a></h3>
 <p>・docker-compose.yml</p>
@@ -322,19 +350,22 @@ config.action_mailer.smtp_settings = { address: 'v33_mail', port: 1025 }
       - POSTGRES_USER=v33
       - POSTGRES_PASSWORD=meetupv33
 </code></pre>
-<p>Dev Container の接続を一度閉じて、再度接続する。
+<p>Dev Container の接続を一度閉じて、再度接続します。
 <img src="./img/chapter4_1.png" alt="Alt text" /></p>
 <p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
 <h3 id="マイグレーション"><a class="header" href="#マイグレーション">マイグレーション</a></h3>
-<p>VSCodeで一度DBを作成し、マイグレーションを実施</p>
+<p>VSCode で一度 DB を作成し、マイグレーションを実施します</p>
 <pre><code class="language-ruby">rails db:create
 rails db:migrate
 </code></pre>
-<p>バックアップしておいたseedデータを投入</p>
+<p>バックアップしておいた seed データを投入して復元完了です</p>
 <pre><code class="language-bash">rails db:seed
 </code></pre>
-<p>ユーザーの登録が出来るか動作確認をして問題無ければ DB のバージョンアップは完了となります。</p>
-<h3 id="補足本番稼働中システムに対するdbバージョンアップについて"><a class="header" href="#補足本番稼働中システムに対するdbバージョンアップについて">補足：本番稼働中システムに対するDBバージョンアップについて</a></h3>
+<p>データの復元に成功していれば、前ページの手順で作成したユーザーが再度見れるようになっているはずです！</p>
+<p>また登録も問題なく出来るはずですのでサーバーをデバッグ起動し確認してみましょう！</p>
+<p>http://localhost:3001/users/</p>
+<p>以上で DB のバージョンアップは完了となります。</p>
+<h3 id="補足本番稼働中システムに対する-db-バージョンアップについて"><a class="header" href="#補足本番稼働中システムに対する-db-バージョンアップについて">補足：本番稼働中システムに対する DB バージョンアップについて</a></h3>
 <p>当手順はあくまでローカル開発環境向けの手順となります。</p>
 <p>本番稼働中のシステムにおいてはデータを損なわないように
 入念な計画の元、専用の移行ツール開発等が必須となりますのでご注意ください。</p>
@@ -342,29 +373,33 @@ rails db:migrate
 <!-- toc -->
 <p>最後に構築した Docker 環境の削除を行います。
 Dev Container の VSCode ターミナル上ではなく、コマンドプロンプトで実施するようお願いします。</p>
-<h2 id="コンテナの停止"><a class="header" href="#コンテナの停止">コンテナの停止</a></h2>
+<h2 id="コンテナの削除"><a class="header" href="#コンテナの削除">コンテナの削除</a></h2>
 <p>次のコマンドを実行し、コンテナの状態を確認します。</p>
+<p>以下コメント部分に記載しているようなコンテナが対象となります。※若干名称が異なる可能性あります</p>
 <pre><code class="language-sh">docker container ls -a
 
-# CONTAINER ID   IMAGE                           COMMAND                  CREATED        STATUS                      PORTS                                 NAMES
-# b173bb2c3e2e   mirameetvol33_v33_web           &quot;/bin/sh -c 'echo Co…&quot;   3 days ago     Up 25 minutes               0.0.0.0:3000-&gt;3000/tcp                v33_web
-# 23f502d1c58a   postgres:13                     &quot;docker-entrypoint.s…&quot;   3 days ago     Exited (137) 2 days ago                                           v33_db
-# 901edcf563d4   mailhog/mailhog                 &quot;MailHog&quot;                3 days ago     Exited (2) 2 days ago                                             v33_mail
+# CONTAINER ID   IMAGE                        COMMAND                  CREATED          STATUS                           PORTS                                 NAMES
+# 0875b41f2d63   postgres:15                  &quot;docker-entrypoint.s…&quot;   4 minutes ago    Up 4 minutes                     0.0.0.0:5434-&gt;5432/tcp                v33_db
+# 1038e3c437bd   mirameetvol33-main_v33_web   &quot;/bin/sh -c 'echo Co…&quot;   48 minutes ago   Up 4 minutes                     0.0.0.0:3001-&gt;3000/tcp                v33_web
+# 74bca59dd4e8   mailhog/mailhog              &quot;MailHog&quot;                48 minutes ago   Up 4 minutes                     1025/tcp, 0.0.0.0:8025-&gt;8025/tcp      v33_mail
 </code></pre>
-<p>上記で確認できた<code>CONTAINER ID</code>を次のコマンドで利用し、コンテナを停止します。</p>
-<pre><code class="language-sh">docker container stop [CONTAINER ID]
+<p>上記で確認できた<code>CONTAINER ID</code>を次のコマンドで利用し、コンテナを削除します。</p>
+<p>複数 ID スペース区切りで一括で指定可能です。</p>
+<pre><code class="language-sh">docker container rm -f [CONTAINER ID 1件目] [CONTAINER ID 2件目] ・・・
 </code></pre>
 <h2 id="イメージの削除"><a class="header" href="#イメージの削除">イメージの削除</a></h2>
 <p>次のコマンドを実行し、作成したコンテナイメージを確認します。</p>
 <pre><code class="language-sh">docker image ls
 
-# REPOSITORY              TAG             IMAGE ID       CREATED         SIZE
-# mirameetvol33_v33_web   latest          40dc866fa6c0   4 days ago      1.08GB
-# postgres                13              efc790b27960   13 days ago     407MB
-# mailhog/mailhog         latest          4de68494cd0d   3 years ago     392MB
+# REPOSITORY                   TAG             IMAGE ID       CREATED          SIZE
+# mirameetvol33-main_v33_web   latest          32ed84dc1bd0   59 minutes ago   1.08GB
+# postgres                     13              efc790b27960   3 weeks ago      407MB
+# postgres                     15              43677b39c446   3 weeks ago      412MB
+# mailhog/mailhog              latest          4de68494cd0d   3 years ago      392MB
 </code></pre>
 <p>上記で確認できた<code>IMAGE ID</code>を利用して、ビルドされたイメージを削除します。</p>
-<pre><code class="language-sh">docker image rm -f [IMAGE ID]
+<p>こちらも同じくスペース区切りで複数指定できます。</p>
+<pre><code class="language-sh">docker image rm -f [IMAGE ID 1件目] [IMAGE ID 2件目] ・・・
 </code></pre>
 <p>次のようなメッセージが確認できたら、イメージが正常に削除出来ています。</p>
 <blockquote>
@@ -374,10 +409,8 @@ Dev Container の VSCode ターミナル上ではなく、コマンドプロン�
 <p>次のコマンドを実行し、作成したボリュームを確認します。</p>
 <pre><code class="language-sh">docker volume ls
 
-# REPOSITORY              TAG             IMAGE ID       CREATED         SIZE
-# mirameetvol33_v33_web   latest          40dc866fa6c0   4 days ago      1.08GB
-# postgres                13              efc790b27960   13 days ago     407MB
-# mailhog/mailhog         latest          4de68494cd0d   3 years ago     392MB
+# DRIVER    VOLUME NAME
+# local     mirameetvol33-main_v33-volume
 </code></pre>
 <p>上記で確認できた<code>volume NAME</code>を利用して、ボリュームを削除します。</p>
 <pre><code class="language-sh">docker volume rm -f [volume NAME]

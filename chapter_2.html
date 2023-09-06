@@ -146,12 +146,12 @@
                     <main>
                         <h1 id="2-docker--vscode-の構築"><a class="header" href="#2-docker--vscode-の構築">2. Docker + VSCode の構築</a></h1>
 <!-- toc -->
-<h2 id="21-プロジェクトのクローン"><a class="header" href="#21-プロジェクトのクローン">2.1. プロジェクトのクローン</a></h2>
+<h2 id="21-プロジェクトのダウンロード"><a class="header" href="#21-プロジェクトのダウンロード">2.1. プロジェクトのダウンロード</a></h2>
 <p>github ページ：https://github.com/miracleave-ltd/mirameetVol33</p>
 <p><code>mirameetVol33-main.zip</code>を解凍し、そのディレクトリをユーザー直下に配置します。<br>※画像は Windows の場合
 <img src="./img/chapter_2_1.png" alt="キャプチャ" /></p>
 <p><img src="./img/chapter_2_2.png" alt="キャプチャ2" /></p>
-<h2 id="22-mirameetvol33-main-フォルダに移動--vscode-で起動"><a class="header" href="#22-mirameetvol33-main-フォルダに移動--vscode-で起動">2.2. mirameetVol33-main フォルダに移動 ～ VScode で起動</a></h2>
+<h2 id="22-配置したフォルダを-vscode-で起動"><a class="header" href="#22-配置したフォルダを-vscode-で起動">2.2. 配置したフォルダを VScode で起動</a></h2>
 <pre><code># Windows
 cd C:\Users\mirameetVol33-main
 # Mac
@@ -165,22 +165,35 @@ code .
 <p>・コンテナで再度開くを選択</p>
 <p><img src="./img/reopen-container.jpg" alt="reopen container" /></p>
 <p>・ウインドウが表示されない場合は左下からコンテナで再度開く</p>
-<p><img src="./img/attache-environment.jpg" alt="attache-environment.jpg" />
-<img src="./img/reopen-container2.jpg" alt="reopen container2" /></p>
+<p><img src="./img/attache-environment.jpg" alt="attache-environment.jpg" /></p>
+<p><img src="./img/reopen-container2.jpg" alt="reopen container2" /></p>
 <p>・左下に開発コンテナと表示されていれば成功です</p>
 <p><img src="./img/atacche-remote.jpg" alt="atacche-remote.jpg" /></p>
 <h2 id="補足開発コンテナーについて"><a class="header" href="#補足開発コンテナーについて">補足：開発コンテナーについて</a></h2>
 <p><img src="./img/devcontainer-image.jpg" alt="devcontainer image" /></p>
-<p>2.2 で開いたものとは別の VSCode が立ち上がるが、devcontainer.json の設定によりプラグインのインストールし直しは不要</p>
+<p>2.2 で開いたものとは別の VSCode が立ち上がります。</p>
+<p>立ち上がると Explorer 上にはコンテナ内にマウントされたソースコードが表示されるようになります。</p>
+<p>よく ‘Docker コンテナの中に入る’ という表現を使うかと思います。以下のようなコマンドですね。</p>
+<blockquote>
+<p>docker container exec -it コンテナ名 bash 等</p>
+</blockquote>
+<p>コマンドからですと、CUI ベースで取っ付きにくい方も多いかと思いますが、この Dev Container ではほぼ同様のことを GUI（VSCode の見た目）ベースで操作出来るので、その点が大きなメリットとなります。</p>
+<p>VSCode のターミナルも以下のようにコンテナ内に入った時のように表示されます。</p>
+<p><img src="./img/chapter_2_6.png" alt="Alt text" /></p>
+<p>devcontainer.json の設定により、VSCode のプラグインのインストールし直しは不要となります。</p>
+<p>実際に JSON ファイルと、インストール済みの拡張機能を確認してみましょう！</p>
+<p>〇.devcontainer\devcontainer.json</p>
+<p><img src="./img/chapter_2_5.png" alt="Alt text" /></p>
+<p>〇拡張機能</p>
 <p><img src="./img/plugins.jpg" alt="plugins" /></p>
 <h2 id="24-rails-プロジェクトを起動"><a class="header" href="#24-rails-プロジェクトを起動">2.4. Rails プロジェクトを起動</a></h2>
 <p>ターミナルにて、以下コマンドを実行しデータベースの作成を行う</p>
 <pre><code class="language-ruby">rails db:create
 </code></pre>
-<p>その後、実行設定の Debug v33 web から Rails を起動する
-<img src="./img/chapter_2_3.png" alt="キャプチャ3" /></p>
-<p>以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります
-<code>http://localhost:3001/</code>
+<p>その後、実行設定の Debug v33 web から Rails を起動する</p>
+<p><img src="./img/chapter_2_3.png" alt="キャプチャ3" /></p>
+<p>以下 URL をブラウザに入力し、画面が表示されれば環境構築は完了となります</p>
+<p><code>http://localhost:3001/</code>
 <img src="./img/chapter_2_4.png" alt="キャプチャ4" /></p>
 <h2 id="補足各ファイルの解説"><a class="header" href="#補足各ファイルの解説">補足：各ファイルの解説</a></h2>
 <p><strong>Dockerfile</strong></p>
