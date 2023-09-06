@@ -5,23 +5,27 @@
 最後に構築した Docker 環境の削除を行います。
 Dev Container の VSCode ターミナル上ではなく、コマンドプロンプトで実施するようお願いします。
 
-## コンテナの停止
+## コンテナの削除
 
 次のコマンドを実行し、コンテナの状態を確認します。
+
+以下コメント部分に記載しているようなコンテナが対象となります。※若干名称が異なる可能性あります
 
 ```sh
 docker container ls -a
 
-# CONTAINER ID   IMAGE                           COMMAND                  CREATED        STATUS                      PORTS                                 NAMES
-# b173bb2c3e2e   mirameetvol33_v33_web           "/bin/sh -c 'echo Co…"   3 days ago     Up 25 minutes               0.0.0.0:3000->3000/tcp                v33_web
-# 23f502d1c58a   postgres:13                     "docker-entrypoint.s…"   3 days ago     Exited (137) 2 days ago                                           v33_db
-# 901edcf563d4   mailhog/mailhog                 "MailHog"                3 days ago     Exited (2) 2 days ago                                             v33_mail
+# CONTAINER ID   IMAGE                        COMMAND                  CREATED          STATUS                           PORTS                                 NAMES
+# 0875b41f2d63   postgres:15                  "docker-entrypoint.s…"   4 minutes ago    Up 4 minutes                     0.0.0.0:5434->5432/tcp                v33_db
+# 1038e3c437bd   mirameetvol33-main_v33_web   "/bin/sh -c 'echo Co…"   48 minutes ago   Up 4 minutes                     0.0.0.0:3001->3000/tcp                v33_web
+# 74bca59dd4e8   mailhog/mailhog              "MailHog"                48 minutes ago   Up 4 minutes                     1025/tcp, 0.0.0.0:8025->8025/tcp      v33_mail
 ```
 
-上記で確認できた`CONTAINER ID`を次のコマンドで利用し、コンテナを停止します。
+上記で確認できた`CONTAINER ID`を次のコマンドで利用し、コンテナを削除します。
+
+複数 ID スペース区切りで一括で指定可能です。
 
 ```sh
-docker container stop [CONTAINER ID]
+docker container rm -f [CONTAINER ID 1件目] [CONTAINER ID 2件目] ・・・
 ```
 
 ## イメージの削除
@@ -31,16 +35,19 @@ docker container stop [CONTAINER ID]
 ```sh
 docker image ls
 
-# REPOSITORY              TAG             IMAGE ID       CREATED         SIZE
-# mirameetvol33_v33_web   latest          40dc866fa6c0   4 days ago      1.08GB
-# postgres                13              efc790b27960   13 days ago     407MB
-# mailhog/mailhog         latest          4de68494cd0d   3 years ago     392MB
+# REPOSITORY                   TAG             IMAGE ID       CREATED          SIZE
+# mirameetvol33-main_v33_web   latest          32ed84dc1bd0   59 minutes ago   1.08GB
+# postgres                     13              efc790b27960   3 weeks ago      407MB
+# postgres                     15              43677b39c446   3 weeks ago      412MB
+# mailhog/mailhog              latest          4de68494cd0d   3 years ago      392MB
 ```
 
 上記で確認できた`IMAGE ID`を利用して、ビルドされたイメージを削除します。
 
+こちらも同じくスペース区切りで複数指定できます。
+
 ```sh
-docker image rm -f [IMAGE ID]
+docker image rm -f [IMAGE ID 1件目] [IMAGE ID 2件目] ・・・
 ```
 
 次のようなメッセージが確認できたら、イメージが正常に削除出来ています。
@@ -54,10 +61,8 @@ docker image rm -f [IMAGE ID]
 ```sh
 docker volume ls
 
-# REPOSITORY              TAG             IMAGE ID       CREATED         SIZE
-# mirameetvol33_v33_web   latest          40dc866fa6c0   4 days ago      1.08GB
-# postgres                13              efc790b27960   13 days ago     407MB
-# mailhog/mailhog         latest          4de68494cd0d   3 years ago     392MB
+# DRIVER    VOLUME NAME
+# local     mirameetvol33-main_v33-volume
 ```
 
 上記で確認できた`volume NAME`を利用して、ボリュームを削除します。

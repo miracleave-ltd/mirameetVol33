@@ -2,10 +2,12 @@
 
 <!-- toc -->
 
-`mailhog` という開発用メールサーバーを利用して簡単なメール送信機能を作成して
-動作の確認が出来るかを確認しましょう
+開発用メールサーバーを利用して簡単なメール送信機能を作成して
+動作確認してみましょう。
 
-mailhog は docker-compose.yml の以下部分に定義されていて DevContainer 起動時点で
+今回は`mailhog` というメールサーバーを用意します。Docker 公式にてイメージが提供されています。
+
+mailhog は docker-compose.yml の以下部分に定義されており、DevContainer 起動時点で
 既に環境が作成されており使用できる状態です。
 
 ```
@@ -26,7 +28,7 @@ Rails の scaffold 機能を使用して、簡単なユーザー画面を作成�
 rails g scaffold User name:string email:string
 ```
 
-その後マイグレーションをしましょう。
+ユーザー用のモデルが作成されましたので、その内容を DB へ反映する為にマイグレーションをしましょう。
 
 ```Ruby
 rails db:migrate
@@ -42,7 +44,7 @@ rails generate mailer User
 
 作成された user_mailer.rb を以下の通り修正します。
 
-・user_mailer.rb
+〇 app\mailers\user_mailer.rb
 
 ```
 class UserMailer < ApplicationMailer
@@ -67,6 +69,8 @@ touch app/views/user_mailer/welcome_email.text.erb
 
 作成されたメール本文定義ファイルに以下の通り記載しましょう。
 
+〇 app/views/user_mailer/welcome_email.text.erb
+
 ```
 <%= @user.name %>様
 
@@ -76,8 +80,9 @@ touch app/views/user_mailer/welcome_email.text.erb
 
 ```
 
-app/controllers/users_controller.rb
-を以下の差分の追加行のみ追記します。
+ユーザー機能のコントローラに対して、以下差分となっている追加行を記載します。
+
+〇 app/controllers/users_controller.rb
 
 ```diff
 # POST /users or /users.json
@@ -97,24 +102,31 @@ def create
 end
 ```
 
-config/enviroments/development.rb
-に以下２行のメール送信用設定値を追加し準備完了です。
+最後に環境定義ファイルにメール送信先の設定を記載して準備完了です。
+
+〇 config/enviroments/development.rb
 
 ```
 config.action_mailer.delivery_method = :smtp
 config.action_mailer.smtp_settings = { address: 'v33_mail', port: 1025 }
 ```
 
-以下アドレスからユーザー画面を確認してみましょう。
+以下アドレスからユーザー画面を確認してみましょう。任意のユーザーを登録した後にメールが送信されます。
 
 http://localhost:3001/users/
 
-任意のユーザーを登録した後にメールが送信されます。
+![Alt text](./img/chapter_3_1.png)
 
-mailhog から内容を確認してみましょう！
+送信された内容を mailhog から確認してみましょう！
 
 http://localhost:8025/
 
+※疑似的なメール画面が表示されるはず
+
+![Alt text](./img/chapter_3_2.png)
+
 ### 補足：その他開発用のメールサーバーについて
 
-Rails の場合は letter_opener という Gem が存在しますので、こちらもメール開発を行う際の選択肢の一つに挙げられます。
+Rails の場合は [letter_opener](https://github.com/ryanb/letter_opener) という Gem が存在します。
+
+こちらも Rails でのメール開発を行う際の選択肢の一つに挙げられます。
